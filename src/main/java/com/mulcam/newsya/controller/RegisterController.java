@@ -1,6 +1,7 @@
 package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.dao.RegisterDao;
+import com.mulcam.newsya.dao.SmsDao;
 import com.mulcam.newsya.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,9 @@ public class RegisterController {
 
     @Autowired
     private RegisterDao rdao;
+
+    @Autowired
+    private SmsDao sdao;
 
     @RequestMapping("/goRegister")
     public String goRegister(){
@@ -43,9 +47,9 @@ public class RegisterController {
     public Map<String, Integer> sendAuthNum(String num){
 
         Map<String, Integer> msg = new HashMap<String, Integer>();
-        
-        // 4자리 난수 생성과 문자 전송
-        boolean res = rnd(num);
+
+        // 문자 전송
+
         // msg 에 값 입력
         return msg;
     }

@@ -1,14 +1,13 @@
 package com.mulcam.newsya.dao;
 
-import com.mulcam.newsya.dto.UserDto;
-
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-public interface RegisterDao {
+public interface SmsDao {
 
-    public String DupChk(UserDto dto);
+    public int rnd();
 
+    public String makeSignature() throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException;
 
 }
