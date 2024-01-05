@@ -1,19 +1,15 @@
 package com.mulcam.newsya.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageDto {
     private String to;
-
-    public MessageDto(){}
-    public MessageDto(String to) {
-        this.to = to;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
 
 }

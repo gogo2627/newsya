@@ -456,11 +456,10 @@
                 });
 
                 $(".interest").click(function(){
-                    let index = $(".interest").index(this);
                     let url = "";
 
                     // 변경사항 db에 저장
-                    let res = Index(index);
+                    let res = {"index":Index($(".interest").index(this))};
                     let ajaxRes = Ajax(url, res);
                     // 정치를 눌렀다면 백으로 정치라는 단어를 보내주고,
                     // db에 정치가 있으면 삭제, 없다면 추가

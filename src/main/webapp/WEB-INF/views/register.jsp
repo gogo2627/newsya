@@ -204,7 +204,8 @@ pageEncoding="UTF-8"%>
                     // form 태그 기본 동작 안멈추면 display 속성 변환 안된다.
                     $(".auth").css("display","flex");
                     let url = "/sendAuth";
-                    let sendAuthRes = Send_AuthNum(url, $("#phone").val());
+                    const phone = {"to": $("#phone").val()};
+                    let sendAuthRes = Send_AuthNum(url, phone);
 
                     if(sendAuthRes === 1){
 
@@ -252,8 +253,9 @@ pageEncoding="UTF-8"%>
                     alert("전화번호를 확인해주세요.");
                 }
 
-                const phone = {"phone": $("#phone").val()};
-                authRes = Send_AuthNum(phone);
+                const url = "/authResend";
+                const phone = {"to": $("#phone").val()};
+                authRes = Send_AuthNum(url, phone);
 
                 if(authRes === 1){
 
@@ -292,10 +294,10 @@ pageEncoding="UTF-8"%>
                 e.preventDefault();
                 // 공백체크
                 let auth = WhiteSpaceChk([$("#auth").val()]);
-                const url = "";
+                const url = "/authCheck";
 
                 // 입력 받은 값을 넘겨주기
-                const authNum = {"auth":auth[0]};
+                const authNum = {"authNum":auth[0]};
                 const res = Send_AuthNum(url, authNum);
 
                 // 일치라는 답을 받으면 authChk를 true로 하고, 인증 성공 alert 출력

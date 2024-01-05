@@ -2,16 +2,25 @@ package com.mulcam.newsya.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mulcam.newsya.common.Redis;
+import com.mulcam.newsya.common.Sms;
 import com.mulcam.newsya.dto.MessageDto;
-import com.mulcam.newsya.dto.SmsRequestDto;
 import com.mulcam.newsya.dto.SmsResponseDto;
 //import org.apache.http.HttpHeaders;
+import lombok.RequiredArgsConstructor;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -30,10 +39,16 @@ import java.util.Random;
 
 @Service
 @PropertySource("classpath:application.properties")
+@RequiredArgsConstructor
 public class SmsDaoImpl {
 
-    private final String authNum = String.valueOf(rnd()); // 인증번호
+    private final Sms sms;
 
+    private final Redis redis;
+
+    @Autowired
+    private SmsResponseDto sdto;
+/*
     @Value("{naver-cloud-sms.accessKey}")
     private String accessKey;
 
@@ -45,16 +60,30 @@ public class SmsDaoImpl {
 
     @Value("{naver-cloud-sms.senderPhone}")
     private String phone;
+*/
 
+    public void sendSmsResponse(String to) {
 
-    public int rnd(){
+        //수신번호 형태에 맞춰 "-"을 ""로 변환
+        to = to.replaceAll("-","");
 
-        // 4자리 난수 생성
-        Random rnd = new Random();
+        // 인증번호 생성
+        String authNum = String.valueOf(sms.rnd());
 
-        return rnd.nextInt(9999) + 1000; // 1000 - 9999?
+        // 문자 발송
+        sms.sendOne(to, authNum);
+
+        //인증번호 유효기간 3분 설정
+        redis.setDataExpire(to, authNum);
+
     }
 
+
+
+
+
+
+    /*
     public String makeSignature(String time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         String space = " ";					// one space
         String newLine = "\n";					// new line
@@ -119,9 +148,11 @@ public class SmsDaoImpl {
     }
 
 
+
+
     // https://velog.io/@kyungwoon/%ED%9C%B4%EB%8C%80%ED%8F%B0-%EB%B2%88%ED%98%B8%EB%A1%9C-%EC%9D%B8%EC%A6%9D%ED%95%98%EA%B8%B0
     // https://wildeveloperetrain.tistory.com/77
     // https://www.baeldung.com/spring-value-annotation
     // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html
-
+    */
 }
