@@ -24,12 +24,18 @@ dependencies {
 	// https://velog.io/@meteor_control0/%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0-Gradle-%EB%B9%8C%EB%93%9C
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	// https://velog.io/@ogu1208/JDBC-SpringBoot%EC%99%80-JDBC-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+	implementation 'net.nurigo:sdk:4.2.7'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	// https://nayha.tistory.com/740
 	implementation 'org.springframework.security:spring-security-crypto'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+	implementation 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

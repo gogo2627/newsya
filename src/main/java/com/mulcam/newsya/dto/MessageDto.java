@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchDto {
-
-    private String searchWord;
+public class MessageDto {
+    private String to;
 
 }
