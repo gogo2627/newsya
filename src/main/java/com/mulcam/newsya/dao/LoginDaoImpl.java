@@ -14,6 +14,7 @@ public class LoginDaoImpl implements LoginDao{
     @Autowired
     private LoginMapper lm;
 
+    @Override
     public List<LoginDto> login(LoginDto dto){
 
         return lm.login(dto);

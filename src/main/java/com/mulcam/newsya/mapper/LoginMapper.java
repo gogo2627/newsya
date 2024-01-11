@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface LoginMapper {
 
-    @Select(" SELECT ID, PW FROM USER WHERE ID = #{id} ")
+    @Select(" SELECT LOGIN_ID, PASSWORD FROM USER WHERE LOGIN_ID = #{id} ")
     List<LoginDto> login(LoginDto dto);
 
 }

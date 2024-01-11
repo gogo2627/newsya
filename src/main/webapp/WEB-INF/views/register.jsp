@@ -205,33 +205,38 @@ pageEncoding="UTF-8"%>
                     $(".auth").css("display","flex");
                     let url = "/sendAuth";
                     const phone = {"to": $("#phone").val()};
-                    let sendAuthRes = Send_AuthNum(url, phone);
 
-                    if(sendAuthRes === 1){
+                    Send_AuthNum(url, phone, function(res) {
 
-                        // 타이머 작동 (180초) (테스트위해 5초로 세팅)
-                        var timeSecond = 5;
+                        console.log("문자 전송 여부 : " + res);
 
-                        time = setInterval(function(){
+                        if(res === 1){
 
-                            if(timeSecond != 0){
+                            // 타이머 작동 (180초) (테스트위해 5초로 세팅)
+                            var timeSecond = 5;
 
-                                timeSecond -= 1;
-                                $("#timer").text(Timer(timeSecond));
+                            time = setInterval(function(){
 
-                            }else{
-                                clearInterval(time);
-                                alert("인증시간이 만료되었습니다.");
-                                // 확인버튼 숨기기
-                                $(".auth-check").hide(); // display : none;
-                            }
+                                if(timeSecond != 0){
 
-                        }, 1000);
+                                    timeSecond -= 1;
+                                    $("#timer").text(Timer(timeSecond));
 
-                    }else{
-                        alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
-                        $(".auth").hide();
-                    }
+                                }else{
+                                    clearInterval(time);
+                                    alert("인증시간이 만료되었습니다.");
+                                    // 확인버튼 숨기기
+                                    $(".auth-check").hide(); // display : none;
+                                }
+
+                            }, 1000);
+
+                        }else{
+                            alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
+                            $(".auth").hide();
+                        }
+
+                    });
 
                 }
 
@@ -253,39 +258,46 @@ pageEncoding="UTF-8"%>
                     alert("전화번호를 확인해주세요.");
                 }
 
-                const url = "/authResend";
+                const url = "/sendAuth";
                 const phone = {"to": $("#phone").val()};
-                authRes = Send_AuthNum(url, phone);
 
-                if(authRes === 1){
+                send_AuthNum(url, phone, (res) => {
 
-                    // 인증버튼 비활성화
-                    $(".tel-auth").attr("disabled", true);
+                    console.log("재전송 체크 : " + res);
 
-                    // 타이머 작동 (180초) (테스트위해 5초로 세팅)
-                    var timeSecond = 5;
+                    if(res === 1){
 
-                    time = setInterval(function(){
+                        // 인증버튼 비활성화
+                        $(".tel-auth").attr("disabled", true);
 
-                        if(timeSecond != 0){
+                        // 타이머 작동 (180초) (테스트위해 5초로 세팅)
+                        var timeSecond = 5;
 
-                            timeSecond -= 1;
-                            $("#timer").text(Timer(timeSecond));
+                        time = setInterval(function(){
 
-                        }else{
+                            if(timeSecond != 0){
 
-                            clearInterval(time);
-                            alert("인증시간이 만료되었습니다.");
-                            // 확인버튼 숨기기
-                            $(".auth-check").hide(); // display : none;
+                                timeSecond -= 1;
+                                $("#timer").text(Timer(timeSecond));
 
-                        }
+                            }else{
 
-                    }, 1000);
+                                clearInterval(time);
+                                alert("인증시간이 만료되었습니다.");
+                                // 확인버튼 숨기기
+                                $(".auth-check").hide(); // display : none;
 
-                }else{
-                    alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
-                }
+                            }
+
+                        }, 1000);
+
+                    }else{
+                        alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+
+                });
+
+
 
             });
 
@@ -298,17 +310,23 @@ pageEncoding="UTF-8"%>
 
                 // 입력 받은 값을 넘겨주기
                 const authNum = {"authNum":auth[0]};
-                const res = Send_AuthNum(url, authNum);
+                Send_AuthNum(url, authNum, function(res) => {
 
-                // 일치라는 답을 받으면 authChk를 true로 하고, 인증 성공 alert 출력
-                // 불일치면 authChk를 false로 하고, 인증 실패 alert 출력
-                if(res === 1){
-                    alert("인증 성공");
-                    authChk = 1;
-                }else{
-                    alert("인증 실패");
-                    authChk = 0;
-                }
+                    console.log("인증 성공 여부 확인 : " + res);
+
+                    // 일치라는 답을 받으면 authChk를 true로 하고, 인증 성공 alert 출력
+                    // 불일치면 authChk를 false로 하고, 인증 실패 alert 출력
+                    if(res === 1){
+                        alert("인증 성공");
+                        authChk = 1;
+                    }else{
+                        alert("인증 실패");
+                        authChk = 0;
+                    }
+
+                });
+
+
 
             });
 
@@ -342,6 +360,7 @@ pageEncoding="UTF-8"%>
             // 중복체크하고나서 아이디 바꾸면 다시 체크 받도록
             $("#id").on('keyup', () => {
                 idDuplicateChkRes = 0;
+                console.log("다시 중복 체크 확인 : " + idDuplicateChkRes);
             });
 
             $(".register-submit").click((e) => {
@@ -374,21 +393,21 @@ pageEncoding="UTF-8"%>
 
             $(".id-duplicate-chk").click(function(e){
 
-                const id = {"id": $("#id").val()};
-                const url = "/duplicateChk";
-
                 e.preventDefault();
+                console.log("idDuplicateChkRes 기본 값: " + idDuplicateChkRes);
+                const nullChkRes = NullChk(WhiteSpaceChk([$("#id").val()]));
 
-                // 전송
-                const res = Send_AuthNum(url, id);
-
-                // 일치하면 idDuplicateChkRes 는 true, 아니면 false
-                if(res === 1){
-                    alert("중복되는 아이디가 존재합니다.");
-                    idDuplicateChkRes = 0;
-                }else{
-                    alert("사용 가능한 아이디입니다.");
-                    idDuplicateChkRes = 1;
+                if (nullChkRes === 1) {
+                    const id = { "id": $("#id").val() };
+                    const url = "/duplicateChk";
+                    Send_AuthNum(url, id, function (res) {
+                        console.log("중복 아이디 체크 : " + res);
+                        idDuplicateChkRes = (res === 1) ? (alert("사용가능한 아이디입니다."), 1) :
+                                                        (alert("중복되는 아이디가 있습니다."), 0);
+                        console.log("idDuplicateChkRes : " + idDuplicateChkRes);
+                    });
+                } else {
+                    alert("아이디를 입력해주세요.");
                 }
 
             });
@@ -406,6 +425,33 @@ pageEncoding="UTF-8"%>
 
             };
 
+            // 백에서 인증 문자 전송 실행 명령
+            // 인증번호 일치 여부 확인
+            function Send_AuthNum(url, val, callback){
+
+                $.ajax({
+                    url: url,
+                    type:'POST',
+                    data:JSON.stringify(val),
+                    contentType:"application/json",
+                    dataType:"json",
+                    success:function(msg){
+                        console.log("ajax 결과 : " + msg.res);
+                        if(msg.res === true){
+                            console.log("true")
+                            callback(1);
+                        }else{
+                            console.log("false");
+                            callback(0);
+                        }
+                    },
+                    error:function(){
+                        alert("통신 에러");
+                    }
+                });
+            }
+
+
             // 공백 제거 (반복문, 정규식과 replace 함수 이용)
             function WhiteSpaceChk(whiteSpaceChk){
 
@@ -422,26 +468,7 @@ pageEncoding="UTF-8"%>
                 return whiteSpaceChk;
             }
 
-            // 백에서 인증 문자 전송 실행 명령
-            // 인증번호 일치 여부 확인
-            function Send_AuthNum(url, num){
 
-                let res;
-
-                $.ajax({
-                    url: url,
-                    type:'POST',
-                    data:JSON.stringify(num),
-                    contentType:"application/json",
-                    dataType:"json",
-                    success:function(msg){
-                        (msg.res == "true")? res = 1 : res = 0;
-                    },
-                    error:function(){
-                    }
-                });
-                return res;
-            }
 
             function NullChk(whiteSpaceChkRes){
 
@@ -488,6 +515,10 @@ pageEncoding="UTF-8"%>
             }
 
         });
+
+
+
+
     </script>
     <!-- https://so4869.tistory.com/23 -->
     <!-- 자바에서도 타이머 세팅하고 시간 지나면 값 저장한 변수 초기화하도록 한다. -->
@@ -499,10 +530,10 @@ pageEncoding="UTF-8"%>
 <body>
     <div>
         <section class="finding-wrap">
-            <form class="finding-pw-tab" name="find-pw">
+            <form class="finding-pw-tab" name="find-pw" action="/regUser" method="post">
                 <header class="finding-head">
                     <a class="finding-logo" href="/">
-                        <img src="./image/NewsYaLogo.png">
+                        <img src="resources/image/NewsYaLogo.png">
                     </a>
                 </header>
                 <div class="finding-pw-name">

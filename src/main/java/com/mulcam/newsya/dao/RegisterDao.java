@@ -9,6 +9,8 @@ import java.security.NoSuchAlgorithmException;
 
 public interface RegisterDao {
 
-    public String DupChk(UserDto dto);
+    public String DupChk(String id);
+
+    public String regUser(UserDto udto);
 
 }
