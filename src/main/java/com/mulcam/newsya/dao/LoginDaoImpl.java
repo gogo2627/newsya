@@ -15,9 +15,16 @@ public class LoginDaoImpl implements LoginDao{
     private LoginMapper lm;
 
     @Override
-    public List<LoginDto> login(LoginDto dto){
+    public String login(LoginDto dto){
 
         return lm.login(dto);
+
+    }
+
+    @Override
+    public String findId(LoginDto ldto) {
+
+        return lm.findId(ldto);
 
     }
 

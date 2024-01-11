@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface LoginDao {
 
-    public List<LoginDto> login(LoginDto dto);
+    public String login(LoginDto dto);
+
+    public String findId(LoginDto ldto);
 
 }

@@ -11,6 +11,6 @@ public interface RegisterDao {
 
     public String DupChk(String id);
 
-    public String regUser(UserDto udto);
+    public int regUser(UserDto udto);
 
 }

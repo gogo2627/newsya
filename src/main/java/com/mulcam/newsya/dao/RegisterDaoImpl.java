@@ -31,7 +31,7 @@ public class RegisterDaoImpl implements RegisterDao{
     }
 
     @Override
-    public String regUser(UserDto udto) {
+    public int regUser(UserDto udto) {
         return rm.regUser(udto);
     }
 

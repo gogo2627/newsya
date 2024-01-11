@@ -198,7 +198,7 @@ pageEncoding="UTF-8"%>
                         <input type="id" name="id" class="login-input" placeholder="아이디">
                     </div>
                     <div class="login-pw">
-                        <input type="password" name="password" class="login-input" placeholder="비밀번호">
+                        <input type="password" name="password" class="login-input" placeholder="비밀번호" max-length="20">
                     </div>
                     <div class="login-find">
                         <a class="finding" href="/goFindId">아이디 찾기</a>

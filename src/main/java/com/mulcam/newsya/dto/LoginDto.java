@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginDto {
 
+    private String name;
     private String id;
-    private String pw;
+    private String password;
+    private String phone;
 
 }

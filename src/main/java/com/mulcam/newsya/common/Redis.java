@@ -32,6 +32,7 @@ public class Redis {
     }
 
     public boolean hasKey(String phone) {
+        System.out.println("hasKey의 전화번호 : " + phone);
         return redisTemplate.hasKey(phone);
     }
 
