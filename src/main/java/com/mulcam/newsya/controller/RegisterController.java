@@ -2,13 +2,16 @@ package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.common.Sms;
 import com.mulcam.newsya.dao.RegisterDao;
-import com.mulcam.newsya.dao.SmsDao;
 import com.mulcam.newsya.dto.MessageDto;
 import com.mulcam.newsya.dto.SmsResponseDto;
 import com.mulcam.newsya.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +22,6 @@ public class RegisterController {
 
     @Autowired
     private RegisterDao rdao;
-
-    @Autowired
-    private SmsDao sdao;
 
     @Autowired
     private SmsResponseDto sdto;
@@ -39,16 +39,23 @@ public class RegisterController {
 
     }
 
-    @RequestMapping("/duplicateChk")
-    public java.util.Map<String, Integer> idDupChk(UserDto dto){
+    @PostMapping("/duplicateChk")
+    @ResponseBody
+    public Map<String, Boolean> idDupChk(@RequestBody UserDto udto){
 
-        Map<String, Integer> msg = new HashMap<String, Integer>();
-        int res = 0;
+        System.out.println("중복체크");
+        System.out.println(udto.getId());
 
+        Map<String, Boolean> msg = new HashMap<String, Boolean>();
+        //int res = false;
+         /*
         if(!Objects.equals(rdao.DupChk(dto), "") || rdao.DupChk(dto) != null){
             res = 1;
         }
+        */
+        boolean res = Objects.equals(rdao.DupChk(udto.getId()), "") || rdao.DupChk(udto.getId()) == null;
 
+        System.out.println(res);
         msg.put("res", res);
 
         return msg;
@@ -56,12 +63,15 @@ public class RegisterController {
     }
 
     @RequestMapping("/sendAuth")
-    public Map<String, String> sendAuthNum(MessageDto mdto){
+    @ResponseBody
+    public Map<String, String> sendAuthNum(@RequestBody MessageDto mdto){
 
         HashMap<String, String> msg = new HashMap<>();
 
+        System.out.println(mdto.getTo());
+
         // 문자 전송
-        sdao.sendSmsResponse(mdto.getTo());
+        sms.sendSmsResponse(mdto.getTo());
 
         // msg 에 값 입력
         msg.put("res", "true");
@@ -70,7 +80,8 @@ public class RegisterController {
     }
 
     @RequestMapping("/authCheck")
-    public Map<String, Boolean> authChk(String auth){
+    @ResponseBody
+    public Map<String, Boolean> authChk(@RequestBody MessageDto mdto){
 
         Map<String, Boolean> msg = new HashMap<String, Boolean>();
 
@@ -83,17 +94,25 @@ public class RegisterController {
         return msg;
     }
 
+    @RequestMapping("/regUser")
+    public String regUser(UserDto udto){
+
+        rdao.regUser(udto); // 성공 실패 경우의 수 나누기, 결과 타입 찾기
+
+        return "redirect: /";
+    }
+
+    /*
     @RequestMapping("/authResend")
     public Map<String, Boolean> authResend(MessageDto dto){
 
         Map<String, Boolean> msg = new HashMap<String, Boolean>();
 
-        sdao.sendSmsResponse(mdto.getTo());
+        sms.sendSmsResponse(mdto.getTo());
 
         msg.put("res", true);
 
         return msg;
     }
-
-
+    */
 }

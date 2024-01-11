@@ -4,16 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+
+import java.sql.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
 public class UserDto {
+
     private String name;
     private String id;
     private String pw;
     private String email;
     private String phone;
+    private Date createdAt;
+    private Date updatedAt;
 
 }

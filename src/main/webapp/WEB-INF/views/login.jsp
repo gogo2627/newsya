@@ -108,6 +108,13 @@ pageEncoding="UTF-8"%>
 
             $(function(){
 
+                let msg = "${msg}";
+                console.log(msg);
+
+                if(msg != null && msg != "") {
+                    alert(msg);
+                }
+
                 // 실시간 공백 제거
                 $(".login-input").on('keyup',function(){
 

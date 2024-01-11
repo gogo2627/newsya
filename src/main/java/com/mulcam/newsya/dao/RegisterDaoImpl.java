@@ -23,13 +23,17 @@ public class RegisterDaoImpl implements RegisterDao{
     private RegisterMapper rm;
 
     @Override
-    public String DupChk(UserDto dto) {
+    public String DupChk(String id) {
 
-        return rm.DupChk(dto);
+        System.out.println("Mapper 결과 : " + rm.DupChk((id)));
+        return rm.DupChk(id);
 
     }
 
-
+    @Override
+    public String regUser(UserDto udto) {
+        return rm.regUser(udto);
+    }
 
 
 }

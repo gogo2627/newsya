@@ -16,12 +16,14 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -36,47 +38,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-@Service
-@PropertySource("classpath:application.properties")
-@RequiredArgsConstructor
-public class SmsDaoImpl {
-
-    private final Sms sms;
-
-    private final Redis redis;
-
-    @Autowired
-    private SmsResponseDto sdto;
 /*
-    @Value("{naver-cloud-sms.accessKey}")
-    private String accessKey;
+@Service
+@RequiredArgsConstructor
+public class SmsDaoImpl implements SmsDao{
 
-    @Value("{naver-cloud-sms.secretKey}")
-    private String secretKey;
 
-    @Value("{naver-cloud-sms.serviceId}")
-    private String serviceId;
-
-    @Value("{naver-cloud-sms.senderPhone}")
-    private String phone;
-*/
-
-    public void sendSmsResponse(String to) {
-
-        //수신번호 형태에 맞춰 "-"을 ""로 변환
-        to = to.replaceAll("-","");
-
-        // 인증번호 생성
-        String authNum = String.valueOf(sms.rnd());
-
-        // 문자 발송
-        sms.sendOne(to, authNum);
-
-        //인증번호 유효기간 3분 설정
-        redis.setDataExpire(to, authNum);
-
-    }
 
 
 
@@ -154,5 +121,6 @@ public class SmsDaoImpl {
     // https://wildeveloperetrain.tistory.com/77
     // https://www.baeldung.com/spring-value-annotation
     // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html
-    */
+
 }
+*/

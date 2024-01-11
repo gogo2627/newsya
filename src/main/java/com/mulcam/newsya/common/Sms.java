@@ -10,11 +10,13 @@ import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
 @Component
+@PropertySource("classpath:application.properties")
 @RequiredArgsConstructor
 public class Sms {
 
@@ -57,7 +59,30 @@ public class Sms {
         // 4자리 난수 생성
         Random rnd = new Random();
 
-        return rnd.nextInt(9999) + 1000; // 1000 - 9999?
+        return rnd.nextInt(9000) + 1000; // 1000-9999
+
+    }
+
+    public void sendSmsResponse(String to) {
+
+        //수신번호 형태에 맞춰 "-"을 ""로 변환
+        to = to.replaceAll("-","");
+
+        System.out.println("- 제거한 수신번호 : " + to);
+
+        // 기존 인증번호 삭제
+        redis.removeSmsCertification(to);
+
+        // 인증번호 생성
+        String authNum = String.valueOf(rnd());
+        System.out.println(authNum);
+
+        // 문자 발송
+        sendOne(to, authNum);
+
+        //인증번호 유효기간 3분 설정
+        redis.setDataExpire(to, authNum);
+
     }
 
     public boolean isVerify(String to){
