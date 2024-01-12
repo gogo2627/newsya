@@ -57,7 +57,7 @@ pageEncoding="UTF-8"%>
             position: relative;
         }
 
-        .finding-input, .finding-input-auth,.finding-submit{
+        .finding-input, .finding-input-auth,.finding-pw-submit{
             width: 300px;
             padding: 10px 40px 11px 1.5rem;
             border: 1px solid black;
@@ -81,7 +81,7 @@ pageEncoding="UTF-8"%>
             margin-right: 40px;
         }
 
-        .finding-submit{
+        .finding-pw-submit{
             background: #ff1678;
             color: black;
             justify-content: center;
@@ -141,6 +141,11 @@ pageEncoding="UTF-8"%>
             margin: 1rem 0;
         }
 
+        .hiding-part{
+            margin: 0;
+            padding: 0;
+        }
+
         body{
             background-color: #fff6f6;
             letter-spacing: -.0125rem;
@@ -194,7 +199,7 @@ pageEncoding="UTF-8"%>
 
             let time; // 전역변수 안하면 이전 setInterval 종료 X
             let authChk = 0;
-            let pwChk = 0;
+            let pwCheck = 0;
 
             // 클래스 내 태그들에 키보드 입력이 발생하면 공백체크해서 공백 실시간 제거
             $(".finding-input").on('keyup', function(){
@@ -211,6 +216,16 @@ pageEncoding="UTF-8"%>
             $("#phone").on('keyup', () => { // oninput 더 찾아보고 더 나은거 쓰기
                 // https://maxkim-j.github.io/posts/keyboard-input/
                 // https://karismamun.tistory.com/66
+                if($(".tel-auth").css("visibility") == "hidden"){
+                    $(".tel-auth").css("visibility", "visible");
+                }
+
+                if($(".auth").css("display") == "flex"){
+                    clearInterval(time);
+                    $(".auth").hide();
+                    $("#auth").val("");
+                }
+
                 authChk = 0;
             });
 
@@ -224,9 +239,6 @@ pageEncoding="UTF-8"%>
                 }else{
 
                     // form 태그 기본 동작 안멈추면 display 속성 변환 안된다.
-                    $(".auth").css("display","flex");
-                    $("#timer").text("3 : 00");
-                    $(".time, .auth-check").show();
                     const url = "/sendAuth";
                     const phone = {"to": $("#phone").val()};
 
@@ -235,6 +247,12 @@ pageEncoding="UTF-8"%>
                         console.log("문자 전송 여부 : " + res);
 
                         if(res === 1){
+                            clearInterval(time);
+                            // 인증버튼 숨기기
+                            $(".tel-auth").css("visibility", "hidden");
+                            $(".auth").css("display","flex");
+                            $("#timer").text("3 : 00");
+                            $(".time, .auth-check").show();
 
                             // 타이머 작동 (180초) (테스트위해 10초로 세팅)
                             var timeSecond = 20;
@@ -257,7 +275,6 @@ pageEncoding="UTF-8"%>
 
                         }else{
                             alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
-                            $(".auth").hide();
                         }
 
                     });
@@ -269,10 +286,10 @@ pageEncoding="UTF-8"%>
             $(".auth-resend").click(function(event){
 
                 let authRes;
-
                 event.preventDefault();
-
                 clearInterval(time);
+
+                $("#auth").val("");
 
                 // 확인 버튼 있으면 남기고, 없어졌으면 다시 생기게 하기
                 if($(".auth-check").css("display") == "none"){
@@ -282,18 +299,13 @@ pageEncoding="UTF-8"%>
                 if(phoneChk($("#phone").val()) === 0) {
                     alert("전화번호를 확인해주세요.");
                 }
-
-                const url = "/sendAuth";
                 const phone = {"to": $("#phone").val()};
 
-                Send_AuthNum(url, phone, (res) => {
+                Send_AuthNum("/sendAuth", phone, (res) => {
 
                     console.log("재전송 체크 : " + res);
 
                     if(res === 1){
-
-                        // 인증버튼 비활성화
-                        $(".tel-auth").attr("disabled", true);
 
                         // 타이머 작동 (180초) (테스트위해 10초로 세팅)
                         var timeSecond = 20;
@@ -329,13 +341,13 @@ pageEncoding="UTF-8"%>
 
                 e.preventDefault();
                 // 공백체크
+                check($(".finding-input:lt(3)"), e);
                 const auth = WhiteSpaceChk([$("#auth").val()]);
                 const url = "/authCheck";
 
-                console.log(auth);
-
                 // 입력 받은 값을 넘겨주기
                 const inputAuthNum = {"inputAuthNum":auth[0], "to":$("#phone").val()};
+
                 Send_AuthNum(url, inputAuthNum, function(res) {
 
                     console.log("인증 성공 여부 확인 : " + res);
@@ -344,13 +356,33 @@ pageEncoding="UTF-8"%>
                     // 불일치면 authChk를 false로 하고, 인증 실패 alert 출력
                     if(res === 1){
                         clearInterval(time);
-
-                        // 비밀번호 입력창, form 태그의 확인버튼 빼고 전부 다 hide
-
-
-                        $(".finding-submit-tab").css("display", "flex");
-                        $(".pw-change").css("display", "flex");
                         authChk = 1;
+
+                        // ajax로 정보 넘겨주고, db와 값 비교
+                        const data = {"name":$("#finding-input-name").val(), "id":$("#finding-input-id").val(), "phone":$("#phone").val()};
+
+                        Send_AuthNum("/findingPw", data, function(res){
+
+                            console.log("회원 존재 여부 확인 : " + res);
+
+                            if(res === 1){
+                                // 새 비밀번호 입력창, form 태그의 확인버튼 빼고 전부 다 hide
+                                $(".hiding-part").hide();
+
+                                // 새 비밀번호 입력창, form 태그 확인버튼 show
+                                $(".finding-submit-tab").css("display", "flex");
+                                $(".pw-change").css("display", "flex");
+
+                            }else{
+                                alert("일치하는 회원 정보가 없습니다.");
+                                $("#auth").val("");
+                                $(".auth").hide();
+                                $(".tel-auth").css("visibility", "visible");
+                                authChk = 0;
+                            }
+
+                        });
+
                     }else{
                         alert("잘못된 인증번호입니다.");
                         authChk = 0;
@@ -362,9 +394,11 @@ pageEncoding="UTF-8"%>
 
             // 비밀번호 입력 감지해 형식에 맞으면서 둘 다 일치하면 체크마크 아니면 x마크 보이기
             // https://karismamun.tistory.com/66
-            $("#new-pw").on("keyup", () => {
+            $("#pw").on("keyup", () => {
 
-                if(pwChk(("#new-pw").val()) === 1){
+                console.log("비번 체크 " + pwCheck);
+
+                if(pwChk($("#pw").val()) === 1){
 
                     $(".true").css("display", "flex");
                     $(".false").hide();
@@ -381,15 +415,28 @@ pageEncoding="UTF-8"%>
 
             });
 
-            $(".finding-submit").click(function(e){
+            // 나중에 js 합칠 때, finding-submit과 별개로 남겨두기.
+            $(".finding-pw-submit").click(function(e){
+
+                if(pwCheck != 1){
+                    alert("비밀번호를 다시 작성해주세요.");
+                    e.preventDefault();
+                }
+
+            });
+
+
+            function check(tmp, e){
 
                 let input = [];
                 let whiteSpaceChkRes = [];
                 let nullChkRes = 0;
 
-                $(".finding-input").each(function(index, element) {
+                tmp.each(function(index, element) { // 인덱스 3까지 반복문 수행
                     input.push($(element).val());
                 });
+
+                console.log(input);
 
                 whiteSpaceChkRes = WhiteSpaceChk(input);
 
@@ -398,12 +445,9 @@ pageEncoding="UTF-8"%>
                 if(nullChkRes != 1){
                     alert("다시 작성해주세요.");
                     e.preventDefault();
-                }else if(authChk == 0){
-                    alert("전화번호 인증을 해주세요.");
-                    e.preventDefault();
                 }
 
-            });
+            };
 
             function Timer(timeSecond){
 
@@ -431,8 +475,6 @@ pageEncoding="UTF-8"%>
                     */
                 });
 
-                console.log(whiteSpaceChk);
-
                 return whiteSpaceChk;
             }
 
@@ -446,6 +488,7 @@ pageEncoding="UTF-8"%>
                     data:JSON.stringify(val),
                     contentType:"application/json",
                     dataType:"json",
+                    async: false,
                     success:function(msg){
                         console.log("ajax 결과 : " + msg.res);
                         if(msg.res == true){
@@ -509,38 +552,40 @@ pageEncoding="UTF-8"%>
 <body>
     <div>
         <section class="finding-wrap">
-            <form class="finding-pw-tab" name="find-pw" action="" method="">
+            <form class="finding-pw-tab" name="find-pw" action="/changePw" method="post">
                 <header class="finding-head">
                     <a class="finding-logo" href="/">
                         <img src="resources/image/NewsYaLogo.png">
                     </a>
                 </header>
-                <div class="finding-pw-name">
-                    <input type="text" name="name" id="finding-input-name" class="finding-input" maxlength="10" placeholder="이름">
-                </div>
-                <div class="finding-pw-id">
-                    <input type="text" name="id" id="finding-input-id" class="finding-input" maxlength="10" placeholder="아이디">
-                </div>
-                <div class="finding-pw-tel">
-                    <input type="tel" name="phone" id="phone" class="finding-input" maxlength="11" placeholder="전화번호(01012345678)">
-                    <!-- 전화번호 형식 맞는지 실시간 체크하는 기능 나중에 추가하기 -->
-                    <button class="tel-auth">인증</button>
-                </div>
-                <div class="auth">
-                    <input type="text" class="finding-input-auth" id="auth" name="auth-number" maxlength="4" placeholder="인증번호">
-                    <div class="time">
-                        <p id="timer"></p>
+                <div class="hiding-part">
+                    <div class="finding-pw-name">
+                        <input type="text" name="name" id="finding-input-name" class="finding-input" maxlength="10" placeholder="이름">
                     </div>
-                    <button class="finding-pw-auth-check">확인</button>
-                    <button class="auth-resend">재전송</button>
+                    <div class="finding-pw-id">
+                        <input type="text" name="id" id="finding-input-id" class="finding-input" maxlength="10" placeholder="아이디">
+                    </div>
+                    <div class="finding-pw-tel">
+                        <input type="tel" name="phone" id="phone" class="finding-input" maxlength="11" placeholder="전화번호(01012345678)">
+                        <!-- 전화번호 형식 맞는지 실시간 체크하는 기능 나중에 추가하기 -->
+                        <button class="tel-auth">인증</button>
+                    </div>
+                    <div class="auth">
+                        <input type="text" class="finding-input-auth" id="auth" name="auth-number" maxlength="4" placeholder="인증번호">
+                        <div class="time">
+                            <p id="timer"></p>
+                        </div>
+                        <button class="finding-pw-auth-check">확인</button>
+                        <button class="auth-resend">재전송</button>
+                    </div>
                 </div>
                 <div class="pw-change">
-                     <input type="text" name="newPw" id="new-pw" class="finding-input" maxlength="20" placeholder="새 비밀번호 입력">
+                     <input type="password" name="password" id="pw" class="finding-input" maxlength="20" placeholder="새 비밀번호 입력">
                      <div class="true"><i class="fa-solid fa-check" id="check-mark" style="color: #45ca21;"></i></div>
                      <div class="false"><i class="fa-regular fa-circle-xmark" id="x-mark" style="color: #f60404;"></i></div>
                  </div>
                 <div class="finding-submit-tab">
-                    <input type="submit" class="finding-submit" value="확인">
+                    <input type="submit" class="finding-pw-submit" value="확인">
                 </div>
             </form>
         </section>

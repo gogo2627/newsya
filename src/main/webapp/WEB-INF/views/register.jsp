@@ -210,9 +210,6 @@ pageEncoding="UTF-8"%>
                 }else{
 
                     // form 태그 기본 동작 안멈추면 display 속성 변환 안된다.
-                    $(".auth").css("display","flex");
-                    $("#timer").text("3 : 00");
-                    $(".time, .auth-check").show();
                     const url = "/sendAuth";
                     const phone = {"to": $("#phone").val()};
 
@@ -221,6 +218,12 @@ pageEncoding="UTF-8"%>
                         console.log("문자 전송 여부 : " + res);
 
                         if(res === 1){
+                            clearInterval(time);
+                            // 인증버튼 숨기기
+                            $(".tel-auth").css("visibility", "hidden");
+                            $(".auth").css("display","flex");
+                            $("#timer").text("3 : 00");
+                            $(".time, .auth-check").show();
 
                             // 타이머 작동 (180초) (테스트위해 10초로 세팅)
                             var timeSecond = 20;
@@ -243,7 +246,6 @@ pageEncoding="UTF-8"%>
 
                         }else{
                             alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
-                            $(".auth").hide();
                         }
 
                     });
@@ -253,19 +255,20 @@ pageEncoding="UTF-8"%>
             });
 
             $(".auth-resend").click(function(event){
+
                 let authRes;
-
                 event.preventDefault();
-
                 clearInterval(time);
+
+                $("#auth").val("");
+
+                if(phoneChk($("#phone").val()) === 0) {
+                    alert("전화번호를 확인해주세요.");
+                }
 
                 // 확인 버튼 있으면 남기고, 없어졌으면 다시 생기게 하기
                 if($(".auth-check").css("display") == "none"){
                     $(".auth-check").show();
-                }
-
-                if(phoneChk($("#phone").val()) === 0) {
-                    alert("전화번호를 확인해주세요.");
                 }
 
                 const url = "/sendAuth";
@@ -276,9 +279,6 @@ pageEncoding="UTF-8"%>
                     console.log("재전송 체크 : " + res);
 
                     if(res === 1){
-
-                        // 인증버튼 비활성화
-                        $(".tel-auth").attr("disabled", true);
 
                         // 타이머 작동 (180초) (테스트위해 10초로 세팅)
                         var timeSecond = 20;
@@ -312,6 +312,7 @@ pageEncoding="UTF-8"%>
             $(".auth-check").click((e) => {
 
                 e.preventDefault();
+
                 // 공백체크
                 const auth = WhiteSpaceChk([$("#auth").val()]);
                 const url = "/authCheck";
@@ -328,8 +329,7 @@ pageEncoding="UTF-8"%>
                     // 불일치면 authChk를 false로 하고, 인증 실패 alert 출력
                     if(res === 1){
                         clearInterval(time);
-                        $(".time").hide();
-                        $(".auth-check").hide();
+                        $(".time, .auth-check").hide();
                         alert("인증 성공");
                         authChk = 1;
                     }else{
@@ -361,10 +361,20 @@ pageEncoding="UTF-8"%>
 
             });
 
-            // 인증 받고나서 번호 변경 일어나면 다시 인증 받도록
+            // 번호 변경 일어나면 다시 인증 받도록
             $("#phone").on('keyup', () => { // oninput 더 찾아보고 더 나은거 쓰기
                 // https://maxkim-j.github.io/posts/keyboard-input/
                 // https://karismamun.tistory.com/66
+                if($(".tel-auth").css("visibility") == "hidden"){
+                    $(".tel-auth").css("visibility", "visible");
+                }
+
+                if($(".auth").css("display") == "flex"){
+                    clearInterval(time);
+                    $(".auth").hide();
+                    $("#auth").val("");
+                }
+
                 authChk = 0;
             });
 

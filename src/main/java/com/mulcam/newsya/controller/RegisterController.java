@@ -1,12 +1,11 @@
 package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.common.Sms;
-import com.mulcam.newsya.dao.RegisterDao;
+import com.mulcam.newsya.service.RegisterDao;
 import com.mulcam.newsya.dto.MessageDto;
 import com.mulcam.newsya.dto.SmsResponseDto;
 import com.mulcam.newsya.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,11 +69,8 @@ public class RegisterController {
 
         System.out.println(mdto.getTo());
 
-        // 문자 전송
-        sms.sendSmsResponse(mdto.getTo());
-
-        // msg 에 값 입력
-        msg.put("res", true);
+        // 문자 전송 및 결과
+        msg.put("res", sms.sendSmsResponse(mdto.getTo()));
 
         return msg;
     }

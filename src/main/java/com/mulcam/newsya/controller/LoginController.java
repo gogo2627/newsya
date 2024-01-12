@@ -1,8 +1,7 @@
 package com.mulcam.newsya.controller;
 
-import com.mulcam.newsya.dao.LoginDao;
+import com.mulcam.newsya.service.LoginDao;
 import com.mulcam.newsya.dto.LoginDto;
-import com.mulcam.newsya.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -23,6 +22,9 @@ public class LoginController {
 
     @Autowired
     private LoginDao ldao;
+
+    @Autowired
+    private PasswordEncoder pwEncoder;
 
     @RequestMapping("/goLogin")
     public String goLoginPage(@ModelAttribute("msg") String msg, Model model){
@@ -69,6 +71,7 @@ public class LoginController {
     }
 
     @RequestMapping("/findingId")
+    @Transactional(rollbackFor = {Exception.class})
     public String findingId(LoginDto ldto, RedirectAttributes redirect){
 
         if(!isNull(ldao.findId(ldto))){
@@ -84,5 +87,38 @@ public class LoginController {
     // isNull, isEmpty, isBlank 차이
     // https://velog.io/@jennyfromdeblock/isBlank-isEmpty-isNull-%EC%B0%A8%EC%9D%B4%EC%A0%90
     // https://onpups.pe.kr/337
+
+    @RequestMapping("/findingPw")
+    @ResponseBody
+    @Transactional(rollbackFor = {Exception.class})
+    public Map<String, Boolean> findingPw(@RequestBody LoginDto ldto){
+
+        Map<String, Boolean> msg = new HashMap<String, Boolean>();
+
+        if(ldao.findPw(ldto)){
+            msg.put("res", true);
+        }else{
+            msg.put("res", false);
+        }
+
+        return msg;
+
+    }
+
+    @RequestMapping("/changePw")
+    @Transactional(rollbackFor = {Exception.class})
+    public String changePw(RedirectAttributes redirect, LoginDto ldto){
+
+        ldto.setPassword(ldto.getPassword());
+
+        if(ldao.changePw(ldto) == 1){
+            redirect.addFlashAttribute("msg", "비밀번호가 변경되었습니다. 다시 로그인해주세요.");
+            return "redirect:/";
+        }else{
+            redirect.addFlashAttribute("msg", "오류 발생. 다시 비밀번호 찾기를 시도해주세요.");
+            return "redirect:/goFindPw";
+        }
+
+    }
 
 }

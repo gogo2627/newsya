@@ -1,13 +1,15 @@
-package com.mulcam.newsya.dao;
+package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.LoginDto;
-
-import java.util.List;
 
 public interface LoginDao {
 
     public String login(LoginDto dto);
 
     public String findId(LoginDto ldto);
+
+    public Boolean findPw(LoginDto ldto);
+
+    public int changePw(LoginDto ldto);
 
 }
