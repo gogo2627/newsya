@@ -106,6 +106,10 @@
             .navbar-user-info{
                 display: none;
             }
+
+            #bullhorn{
+                display:none;
+            }
         }
 
         .intro-head{

@@ -38,6 +38,15 @@ public class LoginController {
         return "findid";
     }
 
+    @RequestMapping("/goShowId")
+    public String goShowIdPage(@ModelAttribute("id") String id, RedirectAttributes redirect){
+
+        System.out.println(id);
+        redirect.addFlashAttribute("id", id);
+
+        return "showid";
+    }
+
     @RequestMapping("/goFindPw")
     public String goFindPwPage(@ModelAttribute("msg") String msg, Model model){
         model.addAttribute("msg", msg);
@@ -73,6 +82,8 @@ public class LoginController {
     @RequestMapping("/findingId")
     @Transactional(rollbackFor = {Exception.class})
     public String findingId(LoginDto ldto, RedirectAttributes redirect){
+
+        System.out.println(ldao.findId(ldto));
 
         if(!isNull(ldao.findId(ldto))){
             redirect.addFlashAttribute("id", ldao.findId(ldto));

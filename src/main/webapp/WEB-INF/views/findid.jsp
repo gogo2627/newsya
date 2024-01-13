@@ -155,15 +155,17 @@ pageEncoding="UTF-8"%>
         }
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
         $(function(){
 
-            let msg = "${msg}";
-            console.log(msg);
-
-            if(msg != null && msg != "") {
-                alert(msg);
-            }
+             if("${msg}" != null && "${msg}" != "") {
+                swal({
+                    text:"${msg}",
+                    icon: "info",
+                    button: "OK",
+                });
+             }
 
             let time; // 전역변수 안하면 이전 setInterval 종료 X
             let authChk = 0;
@@ -202,7 +204,7 @@ pageEncoding="UTF-8"%>
 
                 // 전화번호 형식 체크 (정규식 이용)
                 if(phoneChk($("#phone").val()) === 0) {
-                    alert("전화번호를 확인해주세요.");
+                    swal("잘못된 번호 형식", "번호를 다시 입력해주세요.", "error");
                 }else{
 
                     // form 태그 기본 동작 안멈추면 display 속성 변환 안된다.
@@ -214,34 +216,16 @@ pageEncoding="UTF-8"%>
                         console.log("문자 전송 여부 : " + res);
 
                         if(res === 1){
-                            clearInterval(time);
                             // 인증버튼 숨기기
                             $(".tel-auth").css("visibility", "hidden");
                             $(".auth").css("display","flex");
                             $("#timer").text("3 : 00");
                             $(".time, .auth-check").show();
 
-                            // 타이머 작동 (180초) (테스트위해 10초로 세팅)
-                            var timeSecond = 20;
-
-                            time = setInterval(function(){
-
-                                if(timeSecond != 0){
-
-                                    timeSecond -= 1;
-                                    $("#timer").text(Timer(timeSecond));
-
-                                }else{
-                                    clearInterval(time);
-                                    alert("인증시간이 만료되었습니다.");
-                                    // 확인버튼 숨기기
-                                    $(".auth-check").hide(); // display : none;
-                                }
-
-                            }, 1000);
+                            TimerSet();
 
                         }else{
-                            alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
+                            swal("Error", "인증과정에서 에러가 발생했습니다.", "error");
                             $(".auth").hide();
                         }
 
@@ -265,7 +249,7 @@ pageEncoding="UTF-8"%>
                 }
 
                 if(phoneChk($("#phone").val()) === 0) {
-                    alert("전화번호를 확인해주세요.");
+                    swal("잘못된 번호 형식", "번호를 다시 입력해주세요.", "error");
                 }
 
                 const url = "/sendAuth";
@@ -277,29 +261,10 @@ pageEncoding="UTF-8"%>
 
                     if(res === 1){
 
-                        // 타이머 작동 (180초) (테스트위해 10초로 세팅)
-                        var timeSecond = 20;
-
-                        time = setInterval(function(){
-
-                            if(timeSecond != 0){
-
-                                timeSecond -= 1;
-                                $("#timer").text(Timer(timeSecond));
-
-                            }else{
-
-                                clearInterval(time);
-                                alert("인증시간이 만료되었습니다.");
-                                // 확인버튼 숨기기
-                                $(".auth-check").hide(); // display : none;
-
-                            }
-
-                        }, 1000);
+                        TimerSet();
 
                     }else{
-                        alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
+                        swal("Error", "인증과정에서 에러가 발생했습니다.", "info");
                     }
 
                 });
@@ -327,10 +292,10 @@ pageEncoding="UTF-8"%>
                     if(res === 1){
                         clearInterval(time);
                         $(".time, .auth-check").hide();
-                        alert("인증 성공");
+                        swal("인증 완료", "전화번호가 인증되었습니다.", "success");
                         authChk = 1;
                     }else{
-                        alert("잘못된 인증번호입니다.");
+                        swal("인증 실패", "인증번호가 일치하지 않습니다.", "error");
                         authChk = 0;
                     }
 
@@ -340,23 +305,15 @@ pageEncoding="UTF-8"%>
 
             $(".finding-submit").click(function(e){
 
-                let input = [];
-                let whiteSpaceChkRes = [];
-                let nullChkRes = 0;
-
-                $(".finding-input").each(function(index, element) {
-                    input.push($(element).val());
-                });
-
-                whiteSpaceChkRes = WhiteSpaceChk(input);
-
-                nullChkRes = NullChk(whiteSpaceChkRes);
+                let nullChkRes = check($(".finding-input"), e);
 
                 if(nullChkRes != 1){
-                    alert("다시 작성해주세요.");
+                    swal({
+                      text: "빈 칸을 작성해주세요.", icon: "error", button: "OK",
+                    });
                     e.preventDefault();
                 }else if(authChk == 0){
-                    alert("전화번호 인증을 해주세요.");
+                    swal("전화번호 인증", "전화번호 인증을 해주세요.", "error");
                     e.preventDefault();
                 }
 
@@ -414,7 +371,7 @@ pageEncoding="UTF-8"%>
                         }
                     },
                     error:function(){
-                        alert("통신 에러");
+                        swal("통신 에러", "다시 시도해주세요.", "info");
                     }
                 });
             }
@@ -445,6 +402,62 @@ pageEncoding="UTF-8"%>
                 return phoneChkRes;
 
             }
+
+            function TimerSet(){
+
+                clearInterval(time);
+
+                // 타이머 작동 (180초) (테스트위해 10초로 세팅)
+                var timeSecond = 20;
+
+                time = setInterval(function(){
+
+                    if(timeSecond != 0){
+
+                        timeSecond -= 1;
+                        $("#timer").text(Timer(timeSecond));
+
+                    }else{
+
+                         clearInterval(time);
+                         swal("인증 유효시간 초과", "전화번호 인증을 다시 진행해주세요.", "error");
+                         // 확인버튼 숨기기
+                         $(".auth-check").hide(); // display : none;
+
+                    }
+
+                }, 1000);
+
+            }
+
+            function check(tmp, e){
+
+                let input = [];
+                let whiteSpaceChkRes = [];
+                let nullChkRes = 0;
+
+                tmp.each(function(index, element) { // 인덱스 3까지 반복문 수행
+                    input.push($(element).val());
+                });
+
+                console.log(input);
+
+                whiteSpaceChkRes = WhiteSpaceChk(input);
+
+                nullChkRes = NullChk(whiteSpaceChkRes);
+
+                if(nullChkRes != 1){
+                    swal({
+                        text:"빈 칸을 작성해주세요.",
+                        icon:"error",
+                        button:"OK",
+                    });
+                    e.preventDefault();
+                }
+
+                return nullChkRes;
+
+            };
 
         });
     </script>

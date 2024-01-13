@@ -47,7 +47,7 @@ pageEncoding="UTF-8"%>
             .login-input, .login-submit{
                 display: block;
                 width: 100%;
-                padding: 10px 40px 11px 1.5rem;
+                padding: 10px 40px;
                 border: 1px solid black;
                 border-radius: 10px;
                 box-sizing: border-box;
@@ -108,12 +108,12 @@ pageEncoding="UTF-8"%>
 
             $(function(){
 
-                let msg = "${msg}";
-                console.log(msg);
-
-                if(msg != null && msg != "") {
-                    alert(msg);
-                }
+             if("${msg}" != null && "${msg}" != "") {
+                swal({
+                    text:"${msg}",
+                    icon: "info",
+                });
+             }
 
                 // 실시간 공백 제거
                 $(".login-input").on('keyup',function(){
