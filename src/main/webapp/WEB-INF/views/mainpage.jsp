@@ -426,36 +426,37 @@
             margin: 0;
         }
 
-        .navbar-user-info{ /* 테스트용이니 반드시 지우기 */
+        .navbar-user-info{
             display: none;
         }
 
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
         $(function(){
 
-            let msg = "${msg}";
-            console.log(msg);
-
-            if(msg != null && msg != "") {
-                alert(msg);
-            }
-
-
-            // 세션 영역에서 id 갖고오기. 여기서 그냥 귀찮으니 session.id로 함
+             if("${msg}" != null && "${msg}" != "") {
+                swal({
+                    text:"${msg}",
+                    icon: "info",
+                    button: "OK",
+                });
+             }
 
             // 로그인 상태
-            if($(session.id).length > 0){
+            if("${sessionScope.id}".length > 0){
 
                 let ajaxRes;
                 let url = "";
 
+
+
                 // 로그인 정보 띄우기
                 $(".navbar-user-login").hide();
-                $(".navbar-user-info").show();
-
-                const id = {"id": session.id};
+                $(".navbar-user-info").css("display", "flex");
+                /*
+                const id = {"id": "${sessionScope.id}"};
                 // ajax로 관심분야 갖고오기(배열값 리턴 받는다.)
                 ajaxRes = Ajax(url, id);
 
@@ -487,21 +488,22 @@
                     }
 
                 });
-
+                */
             }else{ // 비로그인 상태
                 $(".interest").click(function(){
-                    location.href=""; // 로그인 페이지로
+                    window.location.href="/goLogin"; // 로그인 페이지로
                 });
             }
 
             // 로그아웃
-            $("#logout").click(() => {
-                location.href="";
+            $("#logout").click(function(){
+                console.log("logout");
+                window.location.href="/logout";
             });
 
             // 마이페이지
             $("#mypage").click(() => {
-                location.href="";
+                location.href="/goMyPage";
             });
 
             function Ajax(url, tmp){
@@ -561,7 +563,7 @@
                     <img id="login" src="resources/image/Login.png">
                 </a>
                 <div class="navbar-user-info">
-                    <p id="user-name">OOO님</p>
+                    <p id="user-name">${sessionScope.id}님</p>
                     <button id="logout">로그아웃</button>
                     <button id="mypage">마이페이지</button>
                 </div>
@@ -586,9 +588,9 @@
                 <br>
                 <p>바쁜 당신을 위한 뉴스 요약 서비스</p>
                 <div class="search-tab">
-                    <form action="" method="post">
+                    <form action="/searchKeyWord" method="post">
                         <fieldset>
-                            <input type="search" class="search-input" placeholder="검색어" name="search">
+                            <input type="search" class="search-input" placeholder="검색어" name="keyWord">
                             <button type="submit" class="search-button">
                                 <img src="resources/image/Search.png">
                             </button>
