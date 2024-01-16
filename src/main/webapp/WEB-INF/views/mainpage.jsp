@@ -106,6 +106,10 @@
             .navbar-user-info{
                 display: none;
             }
+
+            #bullhorn{
+                display:none;
+            }
         }
 
         .intro-head{
@@ -430,6 +434,15 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="text/javascript">
         $(function(){
+
+            let msg = "${msg}";
+            console.log(msg);
+
+            if(msg != null && msg != "") {
+                alert(msg);
+            }
+
+
             // 세션 영역에서 id 갖고오기. 여기서 그냥 귀찮으니 session.id로 함
 
             // 로그인 상태

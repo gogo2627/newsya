@@ -1,17 +1,17 @@
 package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.common.Sms;
-import com.mulcam.newsya.dao.RegisterDao;
+import com.mulcam.newsya.service.RegisterDao;
 import com.mulcam.newsya.dto.MessageDto;
 import com.mulcam.newsya.dto.SmsResponseDto;
 import com.mulcam.newsya.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +32,13 @@ public class RegisterController {
     @Autowired
     private Sms sms;
 
-    @RequestMapping("/goRegister")
-    public String goRegister(){
+    @Autowired
+    private PasswordEncoder pwEncoder;
 
+    @RequestMapping("/goRegister")
+    public String goRegister(@ModelAttribute("msg") String msg, Model model){
+
+        model.addAttribute("msg", msg);
         return "register";
 
     }
@@ -47,12 +51,7 @@ public class RegisterController {
         System.out.println(udto.getId());
 
         Map<String, Boolean> msg = new HashMap<String, Boolean>();
-        //int res = false;
-         /*
-        if(!Objects.equals(rdao.DupChk(dto), "") || rdao.DupChk(dto) != null){
-            res = 1;
-        }
-        */
+
         boolean res = Objects.equals(rdao.DupChk(udto.getId()), "") || rdao.DupChk(udto.getId()) == null;
 
         System.out.println(res);
@@ -64,17 +63,14 @@ public class RegisterController {
 
     @RequestMapping("/sendAuth")
     @ResponseBody
-    public Map<String, String> sendAuthNum(@RequestBody MessageDto mdto){
+    public Map<String, Boolean> sendAuthNum(@RequestBody MessageDto mdto){
 
-        HashMap<String, String> msg = new HashMap<>();
+        HashMap<String, Boolean> msg = new HashMap<>();
 
         System.out.println(mdto.getTo());
 
-        // 문자 전송
-        sms.sendSmsResponse(mdto.getTo());
-
-        // msg 에 값 입력
-        msg.put("res", "true");
+        // 문자 전송 및 결과
+        msg.put("res", sms.sendSmsResponse(mdto.getTo()));
 
         return msg;
     }
@@ -85,7 +81,10 @@ public class RegisterController {
 
         Map<String, Boolean> msg = new HashMap<String, Boolean>();
 
-        if(sms.isVerify(mdto.getTo())){
+        System.out.println("입력받은 전화번호 : " + mdto.getTo());
+        System.out.println("입력받은 인증코드 : " + mdto.getInputAuthNum());
+
+        if(sms.isVerify(mdto)){
             msg.put("res", true);
         }else{
             msg.put("res", false);
@@ -95,11 +94,20 @@ public class RegisterController {
     }
 
     @RequestMapping("/regUser")
-    public String regUser(UserDto udto){
+    @Transactional(rollbackFor = {Exception.class})
+    public String regUser(UserDto udto, RedirectAttributes redirect){
 
-        rdao.regUser(udto); // 성공 실패 경우의 수 나누기, 결과 타입 찾기
+        // 비밀번호 암호화
+        udto.setPassword(pwEncoder.encode(udto.getPassword()));
 
-        return "redirect: /";
+        if (rdao.regUser(udto) == 1) {
+            redirect.addFlashAttribute("msg", "회원가입을 축하드립니다. 다시 로그인해주세요.");
+            return "redirect:/";
+        } else {
+            redirect.addFlashAttribute("msg", "회원가입을 다시 해주세요.");
+            return "redirect:/goRegister";
+        }
+
     }
 
     /*

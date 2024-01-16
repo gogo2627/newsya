@@ -1,5 +1,6 @@
 package com.mulcam.newsya.common;
 
+import com.mulcam.newsya.dto.MessageDto;
 import com.mulcam.newsya.dto.SmsResponseDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -63,12 +64,9 @@ public class Sms {
 
     }
 
-    public void sendSmsResponse(String to) {
+    public boolean sendSmsResponse(String to) {
 
-        //수신번호 형태에 맞춰 "-"을 ""로 변환
-        to = to.replaceAll("-","");
-
-        System.out.println("- 제거한 수신번호 : " + to);
+        System.out.println("수신번호 : " + to);
 
         // 기존 인증번호 삭제
         redis.removeSmsCertification(to);
@@ -77,17 +75,24 @@ public class Sms {
         String authNum = String.valueOf(rnd());
         System.out.println(authNum);
 
-        // 문자 발송
-        sendOne(to, authNum);
-
-        //인증번호 유효기간 3분 설정
-        redis.setDataExpire(to, authNum);
+        // 문자 발송 및 발송 결과
+       if(sendOne(to, authNum).getStatusCode().equals("2000")){ // 정상 발송 statusCode는 2000
+           System.out.println("2000");
+           //인증번호 유효기간 3분 설정
+           redis.setDataExpire(to, authNum);
+           return true;
+       }else{
+           System.out.println("2000 이외");
+           return false;
+       }
 
     }
 
-    public boolean isVerify(String to){
+    public boolean isVerify(MessageDto mdto){
 
-        return (redis.hasKey(to) && redis.getSmsCertification(to).equals(sdto.getAuthNum()));
+        System.out.println("isVerify에 들어온 전화번호 : " + mdto.getTo());
+
+        return (redis.hasKey(mdto.getTo()) && redis.getSmsCertification(mdto.getTo()).equals(mdto.getInputAuthNum()));
 
     }
 

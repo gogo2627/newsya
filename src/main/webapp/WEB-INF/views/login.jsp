@@ -47,7 +47,7 @@ pageEncoding="UTF-8"%>
             .login-input, .login-submit{
                 display: block;
                 width: 100%;
-                padding: 10px 40px 11px 1.5rem;
+                padding: 10px 40px;
                 border: 1px solid black;
                 border-radius: 10px;
                 box-sizing: border-box;
@@ -108,12 +108,12 @@ pageEncoding="UTF-8"%>
 
             $(function(){
 
-                let msg = "${msg}";
-                console.log(msg);
-
-                if(msg != null && msg != "") {
-                    alert(msg);
-                }
+             if("${msg}" != null && "${msg}" != "") {
+                swal({
+                    text:"${msg}",
+                    icon: "info",
+                });
+             }
 
                 // 실시간 공백 제거
                 $(".login-input").on('keyup',function(){
@@ -198,7 +198,7 @@ pageEncoding="UTF-8"%>
                         <input type="id" name="id" class="login-input" placeholder="아이디">
                     </div>
                     <div class="login-pw">
-                        <input type="password" name="password" class="login-input" placeholder="비밀번호">
+                        <input type="password" name="password" class="login-input" placeholder="비밀번호" max-length="20">
                     </div>
                     <div class="login-find">
                         <a class="finding" href="/goFindId">아이디 찾기</a>
