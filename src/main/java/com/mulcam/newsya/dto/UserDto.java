@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.util.UUID;
 
 @Getter
 @Setter

@@ -2,7 +2,7 @@ package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.LoginDto;
 
-public interface LoginDao {
+public interface LoginService {
 
     public String login(LoginDto dto);
 

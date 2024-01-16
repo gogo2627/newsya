@@ -1,6 +1,6 @@
 package com.mulcam.newsya.controller;
 
-import com.mulcam.newsya.service.LoginDao;
+import com.mulcam.newsya.service.LoginService;
 import com.mulcam.newsya.dto.LoginDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static java.util.Objects.isNull;
 public class LoginController {
 
     @Autowired
-    private LoginDao ldao;
+    private LoginService ldao;
 
     @Autowired
     private PasswordEncoder pwEncoder;
@@ -51,6 +51,11 @@ public class LoginController {
     public String goFindPwPage(@ModelAttribute("msg") String msg, Model model){
         model.addAttribute("msg", msg);
         return "findpw";
+    }
+
+    @RequestMapping("/goMyPage")
+    public String goMyPage(){
+        return "mypage"; // 소희님이 작성한 페이지명으로 변경
     }
 
     @PostMapping("/login")

@@ -104,16 +104,17 @@ pageEncoding="UTF-8"%>
             }
         </style>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script type="text/javascript">
 
             $(function(){
 
-             if("${msg}" != null && "${msg}" != "") {
-                swal({
-                    text:"${msg}",
-                    icon: "info",
-                });
-             }
+                 if("${msg}" != null && "${msg}" != "") {
+                    swal({
+                        text:"${msg}",
+                        icon: "info",
+                    });
+                 }
 
                 // 실시간 공백 제거
                 $(".login-input").on('keyup',function(){

@@ -1,7 +1,7 @@
 package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.common.Sms;
-import com.mulcam.newsya.service.RegisterDao;
+import com.mulcam.newsya.service.RegisterService;
 import com.mulcam.newsya.dto.MessageDto;
 import com.mulcam.newsya.dto.SmsResponseDto;
 import com.mulcam.newsya.dto.UserDto;
@@ -16,12 +16,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 @Controller
 public class RegisterController {
 
     @Autowired
-    private RegisterDao rdao;
+    private RegisterService rdao;
 
     @Autowired
     private SmsResponseDto sdto;
