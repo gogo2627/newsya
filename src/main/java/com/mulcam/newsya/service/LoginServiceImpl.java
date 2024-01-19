@@ -2,6 +2,7 @@ package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.LoginDto;
 import com.mulcam.newsya.mapper.LoginMapper;
+import com.mulcam.newsya.mapper.RegisterMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,13 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private LoginMapper lm;
 
+    @Autowired
+    private RegisterMapper rm;
+
     @Override
     public String login(LoginDto dto){
 
+        rm.createUserTable();
         return lm.login(dto);
 
     }
@@ -21,6 +26,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String findId(LoginDto ldto) {
 
+        rm.createUserTable();
         return lm.findId(ldto);
 
     }
@@ -28,6 +34,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Boolean findPw(LoginDto ldto) {
 
+        rm.createUserTable();
         return lm.findPw(ldto);
 
     }
@@ -38,6 +45,7 @@ public class LoginServiceImpl implements LoginService {
         System.out.println("dao 진입 " + res);
 
         try{
+            rm.createUserTable();
             res = lm.changePw(ldto);
         }catch(Exception e){
             System.out.println("[PassWord Update Error]");

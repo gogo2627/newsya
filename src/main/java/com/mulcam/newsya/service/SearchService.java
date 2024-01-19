@@ -8,4 +8,14 @@ public interface SearchService {
 
     public List<SearchDto> searchKeyWord(String keyWord);
 
+    public List<SearchDto> getEconomyArticle();
+
+    public List<SearchDto> getSocialArticle();
+
+    public List<SearchDto> getForeignArticle();
+
+    public List<SearchDto> getPoliticsArticle();
+
+    public List<SearchDto> getMainArticle(String id);
+
 }

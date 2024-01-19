@@ -171,6 +171,13 @@ pageEncoding="UTF-8"%>
         *{
             -webkit-tab-hightlight-color: white;
         }
+
+        @font-face {
+             font-family: 'JalnanGothic';
+             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+             font-weight: normal;
+             font-style: normal;
+        }
     </style>
     <script src="https://kit.fontawesome.com/0eba089d9e.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
