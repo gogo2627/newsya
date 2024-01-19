@@ -1,0 +1,27 @@
+
+#version: "3"
+
+#services:
+#  db:
+#    image: mysql
+#    restart: always
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 1234
+#      MYSQL_DATABASE: mysqldb
+#      MYSQL_PASSWORD: 1234
+#      TZ: Asia/Seoul
+
+# docker 재시작해도 timezone 설정 변하지 않게 하는법
+# https://nstgic3.tistory.com/entry/%EB%8F%84%EC%BB%A4%EB%A1%9C-MySQL-%EC%84%A4%EC%B9%98%ED%95%98%EA%B3%A0-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0-MySQLWorkBench%EB%A1%9C-%EA%B4%80%EB%A6%AC
+# https://velog.io/@ckstn0777/12%EC%9E%A5.-Docker-Compose
+# https://velog.io/@yewo2nn16/docker-6.-docker-compose.yml-%EC%9E%91%EC%84%B1%EB%B2%95
+# https://seosh817.tistory.com/387
+# https://marklee1117.tistory.com/139
+
+# 전부 새 컨테이너를 만들어야해서 기본적으로 docker 안에 이미 동작 중인 컨테이너를 쓸 수 있는 방법을 찾다 이걸로 하기로 함.(my.cnf 파일 수정 => default-time-zone=Asia/Seoul)
+# https://blog.naver.com/wizardkyn/220852348757
+# https://dogcowking.tistory.com/179
+
+

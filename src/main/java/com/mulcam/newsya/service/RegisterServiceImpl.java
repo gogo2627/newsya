@@ -14,6 +14,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public String DupChk(String id) {
 
+        rm.createUserTable();
         return rm.DupChk(id);
 
     }
@@ -23,6 +24,7 @@ public class RegisterServiceImpl implements RegisterService {
         int res = 0;
 
         try{
+            rm.createUserTable();
             res = rm.regUser(udto);
         }catch(Exception e){
             System.out.println("[User Insert Error]");
