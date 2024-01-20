@@ -604,26 +604,26 @@
     </header>
     <nav class="category" role="navigation">
         <div class="category-inner">
-            <a class="category-link" href="/">전체</a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/listpage">전체</a>
+            <a class="category-link" href="/category/economic">
                 <span>
                     <span role="img">⚖️</span>
                     정치
                 </span>
             </a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/foreign">
                 <span>
                     <span role="img">💰</span>
                     경제
                 </span>
             </a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/society">
                 <span>
                     <span role="img">🤝</span>
                     사회
                 </span>
             </a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/politics">
                 <span>
                     <span role="img">🌐</span>
                     세계

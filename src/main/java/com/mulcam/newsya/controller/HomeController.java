@@ -1,12 +1,14 @@
 package com.mulcam.newsya.controller;
 
 
+import com.mulcam.newsya.dto.BoardDto;
 import com.mulcam.newsya.dto.SearchDto;
 import com.mulcam.newsya.dto.UserDto;
 import com.mulcam.newsya.service.SearchService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -38,12 +40,14 @@ public class HomeController {
     }
 
     @RequestMapping("/searchKeyWord")
-    public List<SearchDto> search(SearchDto sdto){
+    public String search(Model model, SearchDto sdto) {
+        // 검색 결과가 있을 때만 검색 결과를 가져와 모델에 추가
+        if (StringUtils.hasText(sdto.getKeyWord())) {
+            List<SearchDto> searchResults = ss.searchKeyWord(sdto.getKeyWord()); // 검색 결과 가져오기
+            model.addAttribute("boardList", searchResults); // 검색 결과를 모델에 추가
+        }
 
-        List<SearchDto> list = ss.searchKeyWord(sdto.getKeyWord());
-
-        return list;
-
+        return "listpage"; // listpage.jsp로 이동
     }
 
     @RequestMapping("/article/{id}")
