@@ -1,13 +1,18 @@
 package com.mulcam.newsya.mapper;
 
+import com.mulcam.newsya.dto.InterestDto;
 import com.mulcam.newsya.dto.SearchDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
 public interface SearchMapper {
+
+    void createCategoryTable();
 
     @Select(" SELECT TITLE, CONTENT, IMG FROM news WHERE TITLE LIKE CONCAT('%', #{keyWord}, '%') AND CONTENT LIKE CONCAT('%', #{keyWord}, '%') ORDER BY DATE DESC LIMIT 15 ")
     List<SearchDto> searchKeyWord(String keyWord);
@@ -26,5 +31,14 @@ public interface SearchMapper {
 
     @Select(" SELECT TITLE, CONTENT, IMG, DATE FROM news WHERE ID = #{id} ")
     List<SearchDto> getMainArticle(String id);
+
+    @Select(" SELECT POLITICS, `FOREIGN`, ECONOMIC, SOCIAL FROM CATEGORY WHERE ID = #{id} ")
+    List<InterestDto> getInterest(String id);
+
+    @Update(" UPDATE CATEGORY SET ${index} = NOT ${index} WHERE ID = #{id} ")
+    int updateInterest(InterestDto idto);
+
+    @Select(" SELECT ${index} FROM CATEGORY WHERE ID = #{id} ")
+    String selectInterest(InterestDto idto);
 
 }

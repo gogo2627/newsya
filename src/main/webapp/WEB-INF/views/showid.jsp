@@ -69,6 +69,7 @@ pageEncoding="UTF-8"%>
             }
 
             body{
+                font-family: 'JalnanGothic';
                 background-color: #fff6f6;
                 letter-spacing: -.0125rem;
                 positon: relative;

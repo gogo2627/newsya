@@ -25,7 +25,17 @@ public class RegisterServiceImpl implements RegisterService {
 
         try{
             rm.createUserTable();
-            res = rm.regUser(udto);
+
+            if(rm.regUser(udto) == 1){
+                if(rm.insertCategory(udto.getId()) == 1){
+                    res = 1;
+                }else{
+                    System.out.println("[Category Insert Error]");
+                }
+            }else{
+                System.out.println("[User Insert Error]");
+            }
+
         }catch(Exception e){
             System.out.println("[User Insert Error]");
             e.printStackTrace();

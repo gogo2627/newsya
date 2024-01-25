@@ -2,18 +2,24 @@ package com.mulcam.newsya.controller;
 
 
 import com.mulcam.newsya.dto.BoardDto;
+import com.mulcam.newsya.dto.InterestDto;
 import com.mulcam.newsya.dto.SearchDto;
 import com.mulcam.newsya.dto.UserDto;
 import com.mulcam.newsya.service.SearchService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Controller
 public class HomeController {
@@ -22,6 +28,8 @@ public class HomeController {
     SearchService ss;
 
     @Autowired SearchDto sdto;
+
+    @Autowired InterestDto idto;
 
     @RequestMapping("/")
     public String root(Model model){
@@ -57,6 +65,35 @@ public class HomeController {
 
         model.addAttribute("article", article);
         return "한빈님 기사 요약 페이지명";
+    }
+
+    @RequestMapping("/getInterest")
+    @ResponseBody
+    public Map<String, Boolean[]> getInterest(@RequestBody InterestDto idto){
+        Map<String, Boolean[]> msg =  new HashMap<String, Boolean[]>();
+
+        List<InterestDto> interest = ss.getInterest(idto.getId());
+
+        Boolean [] arr = {interest.get(0).getPolitics(), interest.get(0).getEconomic(), interest.get(0).getSocial(), interest.get(0).getForeign()};
+
+        msg.put("res", arr);
+
+        return msg;
+    }
+
+    @RequestMapping("/updateInterest")
+    @ResponseBody
+    @Transactional(rollbackFor = {Exception.class})
+    public Map<String, String> updateInterest(@RequestBody InterestDto idto){
+
+        Map<String, String> msg = new HashMap<String, String>();
+
+        System.out.println("아이디 " + idto.getId());
+        System.out.println("분야 " + idto.getIndex());
+
+        msg.put("res", ss.updateInterest(idto));
+
+        return msg;
     }
 
 }

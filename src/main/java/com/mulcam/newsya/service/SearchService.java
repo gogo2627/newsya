@@ -1,7 +1,11 @@
 package com.mulcam.newsya.service;
 
+import com.mulcam.newsya.dto.InterestDto;
 import com.mulcam.newsya.dto.SearchDto;
+import lombok.RequiredArgsConstructor;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface SearchService {
@@ -17,5 +21,10 @@ public interface SearchService {
     public List<SearchDto> getPoliticsArticle();
 
     public List<SearchDto> getMainArticle(String id);
+
+    public List<InterestDto> getInterest(String id);
+
+    public String updateInterest(InterestDto idto);
+
 
 }
