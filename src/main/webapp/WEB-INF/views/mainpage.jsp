@@ -104,13 +104,14 @@
 
         @media screen and (max-width: 750px){ /* 화면크기가 750px 이하면 로그인했을때 로그인 정보 숨긴다. */
             /* (기본적으로 화면 조건 설정할 때, 화면 크기는 margin까지 포함한 크기이다.) */
-            .navbar-user-info{
-                display: none;
-            }
-
-            #bullhorn{
+            .navbar-user-info, #bullhorn{
                 display:none;
             }
+
+            .navbar-user-info > p, button{
+                display:none;
+            }
+
         }
 
         .intro-head{
@@ -286,6 +287,10 @@
         }
 
         #interest-plus{
+            display: inline;
+        }
+
+        #interest-check{
             display: none;
         }
 
@@ -449,49 +454,53 @@
             // 로그인 상태
             if("${sessionScope.id}".length > 0){
 
-                let ajaxRes;
-                let url = "";
-
-
-
                 // 로그인 정보 띄우기
                 $(".navbar-user-login").hide();
                 $(".navbar-user-info").css("display", "flex");
-                /*
+
                 const id = {"id": "${sessionScope.id}"};
                 // ajax로 관심분야 갖고오기(배열값 리턴 받는다.)
-                ajaxRes = Ajax(url, id);
+                const ajaxRes = Ajax("/getInterest", id);
 
-                // 미리 누른 관심분야는 V 표시
+                // 해당 아이디에 이미 설정된 관심분야는 V 표시
                 // each의 index와 interest 클래스와 eq를 사용해 hide, show
                 $.each(ajaxRes, function(index, element){
-                    if(ajaxRes[index] == 1){
+                    if(ajaxRes[index] === true){
                         $(".interest:eq(" + index + ") > span:eq(0)").css("display", "none");
                         $(".interest:eq(" + index + ") > span:eq(1)").css("display", "inline");
                     }
                 });
 
+
                 $(".interest").click(function(){
-                    let url = "";
 
                     // 변경사항 db에 저장
-                    let res = {"index":Index($(".interest").index(this))};
-                    let ajaxRes = Ajax(url, res);
+                    const val = {"id":"${sessionScope.id}", "index":Index($(".interest").index(this))};
+                    const ajaxRes = Ajax("/updateInterest", val);
                     // 정치를 눌렀다면 백으로 정치라는 단어를 보내주고,
                     // db에 정치가 있으면 삭제, 없다면 추가
 
-                    // + -> V로, V -> +로
-                    if ($(this).find("> span:eq(0)").css("display") == "none") {
-                        $(this).find("> span:eq(0)").css("display", "inline");
+                    if(ajaxRes === "0"){
                         $(this).find("> span:eq(1)").css("display", "none");
-                    } else {
+                        $(this).find("> span:eq(0)").css("display", "inline");
+                    }else if(ajaxRes === "1"){
                         $(this).find("> span:eq(0)").css("display", "none");
                         $(this).find("> span:eq(1)").css("display", "inline");
+                    }else{
+                        swal({
+                            text: ajaxRes,
+                            icon: "info",
+                            button: "OK",
+                        });
                     }
 
                 });
-                */
+
             }else{ // 비로그인 상태
+
+                $("#interest-plus").css("display", "inline");
+                $("#interest-check").css("display", "none");
+
                 $(".interest").click(function(){
                     window.location.href="/goLogin"; // 로그인 페이지로
                 });
@@ -508,22 +517,24 @@
                 location.href="/goMyPage";
             });
 
-            function Ajax(url, tmp){
+            function Ajax(url, val){
 
                 let res;
 
-
                 $.ajax({
                     url: url,
-                    type: "post",
-                    data: JSON.stringify(tmp),
-                    dataType: "json",
-                    applicationType: "application/json",
+                    type:'POST',
+                    data:JSON.stringify(val),
+                    async:false, // 비동기 -> 동기식
+                    contentType:"application/json",
+                    dataType:"json",
                     success: function(msg){
-                        res = meg.res;
+
+                        res = msg.res;
+
                     },
                     error: function(){
-
+                        swal("통신 에러", "다시 시도해주세요.", "info");
                     }
                 });
 
@@ -532,22 +543,28 @@
 
             function Index(index){
 
+                console.log("인덱스 함수 인덱스 : " + index);
                 let res;
 
-                switch(index){
-                    case "0":
+                switch(index) {
+                    case 0:
                         res = "politics";
                         break;
-                    case "1":
-                        res = "economy";
+                    case 1:
+                        res = "economic";
                         break;
-                    case "2":
-                        res = "social";
-                        break;
-                    case "3":
-                        res = "world";
-                        break;
+                    case 2:
+                         res = "social";
+                         break;
+                    case 3:
+                         res = "foreign";
+                         break;
+                    default:
+                         break;
                 }
+
+                console.log("인덱스 함수 결과 : " + res);
+                return res;
             }
         });
     </script>
@@ -576,7 +593,7 @@
         <h1 class="intro-head-title">
             <div class="intro-inner">
                 시간이 없어?
-                <span class="mobile-block">그럼 핵심만 들려줄게!</span>
+                <span class="mobile-block">그럼 핵심만 알려줄게!</span>
             </div>
 
         </h1>
@@ -586,13 +603,13 @@
             </div>
             <div class="intro-inner">
                 <p>하루 하루 바쁘시죠?</p>
-                <p>그런 당신을 위해 우리가 핵심만 들려줄게요.</p>
+                <p>그런 당신을 위해 우리가 핵심만 알려줄게요.</p>
                 <br>
                 <p>바쁜 당신을 위한 뉴스 요약 서비스</p>
                 <div class="search-tab">
                     <form action="/searchKeyWord" method="post">
                         <fieldset>
-                            <input type="search" class="search-input" placeholder="검색어" name="keyWord">
+                            <input type="search" class="search-input" name="keyWord">
                             <button type="submit" class="search-button">
                                 <img src="resources/image/Search.png">
                             </button>
@@ -604,26 +621,26 @@
     </header>
     <nav class="category" role="navigation">
         <div class="category-inner">
-            <a class="category-link" href="/">전체</a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/all">전체</a>
+            <a class="category-link" href="/category/politics">
                 <span>
                     <span role="img">⚖️</span>
                     정치
                 </span>
             </a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/economic">
                 <span>
                     <span role="img">💰</span>
                     경제
                 </span>
             </a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/society">
                 <span>
                     <span role="img">🤝</span>
                     사회
                 </span>
             </a>
-            <a class="category-link" href="">
+            <a class="category-link" href="/category/foreign">
                 <span>
                     <span role="img">🌐</span>
                     세계
@@ -634,11 +651,13 @@
     <section class="news">
         <div class="news-category">
             <h2>⚖️ 정치</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach var="plist" items="${plist}">
@@ -694,11 +713,13 @@
 
         <div class="news-category">
             <h2>💰 경제</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach items="${elist}" var="elist">
@@ -753,11 +774,13 @@
 
         <div class="news-category">
             <h2>🤝 사회</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach var="slist" items="${slist}">
@@ -812,11 +835,13 @@
 
         <div class="news-category">
             <h2>🌐 세계</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach var="flist" items="${flist}">
