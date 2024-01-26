@@ -25,25 +25,27 @@ public class NewsController {
         return "list";
     }
 
-    @RequestMapping("/listpage")
-    public String listpage(Model model) {
+
+    @RequestMapping({"/listpage", "/category/all"})
+    public String getAllNews(Model model) {
         List<BoardDto> boardList = boardService.getAllBoards();
         int limit = 15;
         List<BoardDto> limitedNews = boardList.subList(0, Math.min(limit, boardList.size()));
-        model.addAttribute("boardList", limitedNews); //카테고리 없이 통합으로
+        model.addAttribute("boardList", limitedNews); // 모든 카테고리로 설정
 
-        // 기본 카테고리 라벨 설정
-        String defaultCategoryLabel = getCategoryLabel("default");  // 예시로 "" 카테고리를 기본으로 설정
-        model.addAttribute("categoryLabel", defaultCategoryLabel);
+        // 카테고리 라벨 설정
+        String categoryLabel = getCategoryLabel("all");
+        model.addAttribute("categoryLabel", categoryLabel);
+
         return "listpage";
     }
 
     @RequestMapping("/category/{category}")
-    public String getCategoryNews(@PathVariable String category, Model model) {
+    public String getCategoryNews(@PathVariable("category") String category, Model model) {
         List<BoardDto> categoryNews = boardService.getNewsByCategory(category);
         model.addAttribute("boardList", categoryNews);
 
-        // 카테고리 문자열 설정
+        // 카테고리 라벨 설정
         String categoryLabel = getCategoryLabel(category);
         model.addAttribute("categoryLabel", categoryLabel);
 
@@ -53,13 +55,13 @@ public class NewsController {
     private String getCategoryLabel(String category) {
         switch (category) {
             case "politics":
-                return "\uD83C\uDF10 세계";
+                return "\uD83C\uDF10 정치";
             case "economic":
-                return "⚖\uFE0F 정치";
+                return "⚖\uFE0F 경제";
             case "society":
                 return "\uD83E\uDD1D 사회";
             case "foreign":
-                return "\uD83D\uDCB0 경제";
+                return "\uD83D\uDCB0 세계";
             // 추가 카테고리에 대한 정의
             default:
                 return "통합";

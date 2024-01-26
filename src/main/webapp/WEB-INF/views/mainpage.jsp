@@ -484,7 +484,6 @@
                         $(this).find("> span:eq(1)").css("display", "none");
                         $(this).find("> span:eq(0)").css("display", "inline");
                     }else if(ajaxRes === "1"){
-                        swal({text: "매일 이 분야의 요약 뉴스를 보내드릴게요.\n 원치않으시면 관심분야 버튼을 눌러 해제해주세요.", icon: "info", buttons: "OK"});
                         $(this).find("> span:eq(0)").css("display", "none");
                         $(this).find("> span:eq(1)").css("display", "inline");
                     }else{
@@ -622,14 +621,14 @@
     </header>
     <nav class="category" role="navigation">
         <div class="category-inner">
-            <a class="category-link" href="/listpage">전체</a>
-            <a class="category-link" href="/category/economic">
+            <a class="category-link" href="/category/all">전체</a>
+            <a class="category-link" href="/category/politics">
                 <span>
                     <span role="img">⚖️</span>
                     정치
                 </span>
             </a>
-            <a class="category-link" href="/category/foreign">
+            <a class="category-link" href="/category/economic">
                 <span>
                     <span role="img">💰</span>
                     경제
@@ -641,7 +640,7 @@
                     사회
                 </span>
             </a>
-            <a class="category-link" href="/category/politics">
+            <a class="category-link" href="/category/foreign">
                 <span>
                     <span role="img">🌐</span>
                     세계
