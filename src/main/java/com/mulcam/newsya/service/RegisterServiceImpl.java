@@ -2,6 +2,7 @@ package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.UserDto;
 import com.mulcam.newsya.mapper.RegisterMapper;
+import com.mulcam.newsya.mapper.SearchMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public String DupChk(String id) {
 
+        rm.createUserTable();
         return rm.DupChk(id);
 
     }
@@ -23,6 +25,7 @@ public class RegisterServiceImpl implements RegisterService {
         int res = 0;
 
         try{
+            rm.createUserTable();
             res = rm.regUser(udto);
         }catch(Exception e){
             System.out.println("[User Insert Error]");

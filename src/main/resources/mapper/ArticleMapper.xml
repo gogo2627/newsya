@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mulcam.newsya.mapper.ArticleMapper">
+
+    <select id="selectMyLikedNews" resultType="com.mulcam.newsya.dto.Article">
+        SELECT ATICLE.ID, ATICLE.TITLE, ATICLE.CONTENT, ATICLE.IMG
+        FROM NEWS ATICLE, LIKE1 LL, USER U
+        WHERE U.LOGIN_ID = #{loginId}
+        AND ATICLE.ID = LL.NEWS_ID
+        AND LL.USER_ID = U.LOGIN_ID
+        AND LL.NEWS_LIKE_YN=1
+    </select>
+
+</mapper>

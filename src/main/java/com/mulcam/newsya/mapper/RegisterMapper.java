@@ -4,9 +4,12 @@ import com.mulcam.newsya.dto.UserDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface RegisterMapper {
+
+    void createUserTable();
 
     @Select(" SELECT LOGIN_ID FROM USER WHERE LOGIN_ID = #{id} ")
     String DupChk(String id);

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -434,6 +435,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
+
         $(function(){
 
              if("${msg}" != null && "${msg}" != "") {
@@ -639,17 +641,20 @@
             </button>
         </div>
         <div class="posts">
-            <a class="card" href="">
+            <c:forEach var="plist" items="${plist}">
+            <a class="card" href="/article/${plist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
-                        <img src="resources/image/example.jpg">
+                        <img src="${plist.img}">
                     </figure>
                     <div class="card-body">
-                        <h3 class="card-title">예시1</h3>
-                        <time class="card-date">2023/12/15</time>
+                        <h3 class="card-title">${plist.title}</h3>
+                        <time class="card-date">${plist.date}</time>
                     </div>
                 </div>
             </a>
+            </c:forEach>
+            <!--
             <a class="card" href="">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
@@ -683,6 +688,8 @@
                     </div>
                 </div>
             </a>
+            -->
+
         </div>
 
         <div class="news-category">
@@ -694,17 +701,20 @@
             </button>
         </div>
         <div class="posts">
-            <a class="card" href="">
+            <c:forEach items="${elist}" var="elist">
+            <a class="card" href="/article/${elist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
-                        <img src="">
+                        <img src="${elist.img}">
                     </figure>
                     <div class="card-body">
-                        <h3 class="card-title">예시1</h3>
-                        <time class="card-date">2023/12/15</time>
+                        <h3 class="card-title">${elist.title}</h3>
+                        <time class="card-date">${elist.date}</time>
                     </div>
                 </div>
             </a>
+            </c:forEach>
+            <!--
             <a class="card" href="">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
@@ -738,6 +748,7 @@
                     </div>
                 </div>
             </a>
+            -->
         </div>
 
         <div class="news-category">
@@ -749,17 +760,20 @@
             </button>
         </div>
         <div class="posts">
-            <a class="card" href="">
+            <c:forEach var="slist" items="${slist}">
+            <a class="card" href="/article/${slist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
-                        <img src="">
+                        <img src="${slist.img}">
                     </figure>
                     <div class="card-body">
-                        <h3 class="card-title">예시1</h3>
-                        <time class="card-date">2023/12/15</time>
+                        <h3 class="card-title">${slist.title}</h3>
+                        <time class="card-date">${slist.date}</time>
                     </div>
                 </div>
             </a>
+            </c:forEach>
+            <!--
             <a class="card" href="">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
@@ -793,10 +807,11 @@
                     </div>
                 </div>
             </a>
+            -->
         </div>
 
         <div class="news-category">
-            <h2>🌐 문화</h2>
+            <h2>🌐 세계</h2>
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
@@ -804,17 +819,20 @@
             </button>
         </div>
         <div class="posts">
-            <a class="card" href="">
+            <c:forEach var="flist" items="${flist}">
+            <a class="card" href="/article/${flist}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
-                        <img src="">
+                        <img src="${flist.img}">
                     </figure>
                     <div class="card-body">
-                        <h3 class="card-title">예시1</h3>
-                        <time class="card-date">2023/12/15</time>
+                        <h3 class="card-title">${flist.title}</h3>
+                        <time class="card-date">${flist.date}</time>
                     </div>
                 </div>
             </a>
+            </c:forEach>
+            <!--
             <a class="card" href="">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
@@ -848,6 +866,7 @@
                     </div>
                 </div>
             </a>
+            -->
         </div>
     </section>
 
@@ -859,7 +878,7 @@
         </div>
         <div class="footer-info">
             <p>(주)NewsYa</p>
-            <p>대표: 뉴스야 / 사업자 등록번호: 000-00-00000</p>
+            <p>대표: 뉴스야 / 사업자 등록번호: 123-00-123456</p>
             <p>서울특별시 광진구 능동로 195-16 5층, 6층</p>
             <p>newsya@newsya.com</p>
             <small class="footer-copyright">Copyright &copy; NewsYa</small>

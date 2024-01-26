@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-// @ComponentScan(basePackages = "com.mulcam.newsya")
-// SpringBootApplication에 기본적으로 ComponentScan이 들어가있다.... 그런데 왜 못찾지...?
 public class NewsyaApplication {
 
 	public static void main(String[] args) {
