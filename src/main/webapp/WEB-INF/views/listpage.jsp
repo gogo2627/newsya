@@ -603,6 +603,18 @@
             padding: 5px;
         }
 
+        @media screen and (max-width: 750px){ /* 화면크기가 750px 이하면 로그인했을때 로그인 정보 숨긴다. */
+            /* (기본적으로 화면 조건 설정할 때, 화면 크기는 margin까지 포함한 크기이다.) */
+            .navbar-user-info, #bullhorn{
+                display:none;
+            }
+
+            .navbar-user-info > p, button{
+                display:none;
+            }
+
+        }
+
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -621,48 +633,10 @@
             // 로그인 상태
             if("${sessionScope.id}".length > 0){
 
-                let ajaxRes;
-                let url = "";
-
-
-
                 // 로그인 정보 띄우기
                 $(".navbar-user-login").hide();
                 $(".navbar-user-info").css("display", "flex");
-                /*
-                const id = {"id": "${sessionScope.id}"};
-                // ajax로 관심분야 갖고오기(배열값 리턴 받는다.)
-                ajaxRes = Ajax(url, id);
 
-                // 미리 누른 관심분야는 V 표시
-                // each의 index와 interest 클래스와 eq를 사용해 hide, show
-                $.each(ajaxRes, function(index, element){
-                    if(ajaxRes[index] == 1){
-                        $(".interest:eq(" + index + ") > span:eq(0)").css("display", "none");
-                        $(".interest:eq(" + index + ") > span:eq(1)").css("display", "inline");
-                    }
-                });
-
-                $(".interest").click(function(){
-                    let url = "";
-
-                    // 변경사항 db에 저장
-                    let res = {"index":Index($(".interest").index(this))};
-                    let ajaxRes = Ajax(url, res);
-                    // 정치를 눌렀다면 백으로 정치라는 단어를 보내주고,
-                    // db에 정치가 있으면 삭제, 없다면 추가
-
-                    // + -> V로, V -> +로
-                    if ($(this).find("> span:eq(0)").css("display") == "none") {
-                        $(this).find("> span:eq(0)").css("display", "inline");
-                        $(this).find("> span:eq(1)").css("display", "none");
-                    } else {
-                        $(this).find("> span:eq(0)").css("display", "none");
-                        $(this).find("> span:eq(1)").css("display", "inline");
-                    }
-
-                });
-                */
             }else{ // 비로그인 상태
                 $(".interest").click(function(){
                     window.location.href="/goLogin"; // 로그인 페이지로
@@ -702,25 +676,6 @@
                 return res;
             }
 
-            function Index(index){
-
-                let res;
-
-                switch(index){
-                    case "0":
-                        res = "politics";
-                        break;
-                    case "1":
-                        res = "economy";
-                        break;
-                    case "2":
-                        res = "social";
-                        break;
-                    case "3":
-                        res = "world";
-                        break;
-                }
-            }
         });
     </script>
     <script>

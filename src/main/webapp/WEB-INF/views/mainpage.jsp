@@ -651,11 +651,13 @@
     <section class="news">
         <div class="news-category">
             <h2>⚖️ 정치</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach var="plist" items="${plist}">
@@ -711,11 +713,13 @@
 
         <div class="news-category">
             <h2>💰 경제</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach items="${elist}" var="elist">
@@ -770,11 +774,13 @@
 
         <div class="news-category">
             <h2>🤝 사회</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach var="slist" items="${slist}">
@@ -829,11 +835,13 @@
 
         <div class="news-category">
             <h2>🌐 세계</h2>
+            <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
                 <span id="interest-check">✔</span>
                 <span>관심분야</span>
             </button>
+            -->
         </div>
         <div class="posts">
             <c:forEach var="flist" items="${flist}">
