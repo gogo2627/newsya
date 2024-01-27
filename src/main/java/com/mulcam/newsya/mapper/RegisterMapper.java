@@ -17,6 +17,9 @@ public interface RegisterMapper {
     @Insert(" INSERT INTO USER VALUES(UUID_TO_BIN(UUID(), 1), #{id}, #{password}, #{name}, #{email}, #{phone}, NOW(), NOW()) ")
     int regUser(UserDto udto);
 
+    @Insert(" INSERT INTO CATEGORY VALUES(#{id}, FALSE, FALSE, FALSE, FALSE, NOW(), NOW()) ")
+    int insertCategory(String id);
+
 }
 
 // org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'pw' 에러

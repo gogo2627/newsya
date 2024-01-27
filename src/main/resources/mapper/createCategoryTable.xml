@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mulcam.newsya.mapper.SearchMapper">
+    <update id="createCategoryTable">
+        CREATE TABLE IF NOT EXISTS CATEGORY (
+            ID VARCHAR(45) PRIMARY KEY,
+            `FOREIGN` TINYINT(1),
+            ECONOMIC TINYINT(1),
+            SOCIAL TINYINT(1),
+            POLITICS TINYINT(1),
+            CREATED_AT DATETIME,
+            UPDATED_AT DATETIME
+        );
+    </update>
+</mapper>
+
+        <!--
+        https://velog.io/@yeoonnii/20220914-Oracle
+        https://123okk2.tistory.com/456
+        https://github.com/madplay/madplay.github.io/issues/131
+        -->

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.mulcam.newsya.mapper.RegisterMapper">
     <update id="createUserTable">
-        CREATE TABLE IF NOT EXISTS user (
+        CREATE TABLE IF NOT EXISTS USER (
         ID BINARY(16) PRIMARY KEY,
         LOGIN_ID VARCHAR(45) NOT NULL UNIQUE,
         PASSWORD VARCHAR(256),

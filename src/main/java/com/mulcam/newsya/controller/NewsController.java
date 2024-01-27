@@ -2,10 +2,10 @@ package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.dto.BoardDto;
 import com.mulcam.newsya.service.BoardService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class NewsController {
         System.out.println("TestController home");
         return "list";
     }
+
 
     @RequestMapping({"/listpage", "/category/all"})
     public String getAllNews(Model model) {
@@ -51,29 +52,16 @@ public class NewsController {
         return "listpage";
     }
 
-    @PostMapping("/toggleLike")
-    @ResponseBody
-    public String toggleLike(@RequestParam("newsId") int newsId, HttpSession session) {
-        if (session.getAttribute("id") == null) {
-            return "로그인이 필요합니다.";
-        } else {
-            // 좋아요 토글 기능 호출
-            boardService.toggleLike(newsId, (String) session.getAttribute("id"));
-            return "좋아요 상태가 변경되었습니다.";
-        }
-    }
-
-
     private String getCategoryLabel(String category) {
         switch (category) {
             case "politics":
-                return "\uD83C\uDF10 세계";
+                return "\uD83C\uDF10 정치";
             case "economic":
-                return "⚖\uFE0F 정치";
+                return "⚖\uFE0F 경제";
             case "society":
                 return "\uD83E\uDD1D 사회";
             case "foreign":
-                return "\uD83D\uDCB0 경제";
+                return "\uD83D\uDCB0 세계";
             // 추가 카테고리에 대한 정의
             default:
                 return "통합";
