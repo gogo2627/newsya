@@ -88,9 +88,6 @@ public class HomeController {
 
         Map<String, String> msg = new HashMap<String, String>();
 
-        System.out.println("아이디 " + idto.getId());
-        System.out.println("분야 " + idto.getIndex());
-
         msg.put("res", ss.updateInterest(idto));
 
         return msg;

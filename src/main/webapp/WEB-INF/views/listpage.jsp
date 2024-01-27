@@ -282,10 +282,9 @@
             position: relative;
         }
 
-        .news-category > h2{
+        .news-category > h1{
             display: inline-block;
             vertical-align: middle;
-            margin-right: 15px;
             text-align: center;
         }
 
@@ -444,7 +443,7 @@
         h1, h2, h3{
             font-weight: 700px;
             color: black;
-            line-height: 1.4;
+            line-height: 2;
             word-break: keep-all; /* 텍스트가 자신의 콘텐츠 박스 밖으로 오버플로 할 때 줄을 바꿀 지 지정 */
             /* https://developer.mozilla.org/ko/docs/Web/CSS/word-break */
         }
@@ -458,16 +457,22 @@
         }
 
         h1, p{
-            margin: 0;
+            margin: 10px;
         }
 
         .navbar-user-info{
-            display: none }
+            display: none
+        }
 
         /*위에는 승주님이 적으신 css*/
         button:not(:active), button:not(:focus) {
             outline: 0;
         }
+
+        .category-title{
+            margin-bottom: 3px;
+        }
+
         .secondary-button {
             display: inline-block;
             min-width: 104px;
@@ -630,6 +635,29 @@
                 });
             }
 
+            if("${categoryLabel}" != null && "${categoryLabel}" != ""){
+                // 사용자가 선택한 특정 날짜가 있다면 그 날짜를, 아니면 오늘 날짜를 보여준다.
+                if("${date}" != null && "${date}" != ""){
+                    // 날짜 선택 칸을 특정 날짜로 세팅.
+                    $("#select-date").val("${date}");
+                }else{
+                    // 날짜 선택 칸 오늘 날짜로 세팅.
+                    const today = new Date().toISOString().substring(0,10);
+                    $("#select-date").val(today);
+                }
+            }else{
+                $(".news-date").hide();
+            }
+
+
+
+            // 각 분야 목록 페이지에 어떤 목록인지 이모티콘과 함께 표시.
+            $(".category-title").html(getCategoryLabel("${categoryLabel}"));
+
+            // 오늘 이후 날짜 선택 막기.
+            const maxDay = new Date((Date.now())-(new Date().getTimezoneOffset()*60000)).toISOString().split("T")[0];
+            $("#select-date").prop("max", maxDay);
+
             // 로그인 상태
             if("${sessionScope.id}".length > 0){
 
@@ -654,10 +682,25 @@
                 location.href="/goMyPage";
             });
 
+            $("#select-date").change(() => {
+                location.href="/category/${category}/date=" + $("#select-date").val();
+            });
+
+            $(".like-button").click(function() {
+                var newsId = $(this).data("news-id");
+                $.ajax({
+                    url: "/toggleLike",
+                    type: "POST",
+                    data: { newsId: newsId },
+                    success: function(response) {
+                        alert(response); // 좋아요 상태 변경 결과를 알림 // sweetalert api 사용하는 코드로 수정해주세요.
+                    }
+                });
+            });
+
             function Ajax(url, tmp){
 
                 let res;
-
 
                 $.ajax({
                     url: url,
@@ -669,28 +712,36 @@
                         res = meg.res;
                     },
                     error: function(){
-
+                        swal("통신 에러", "다시 시도해주세요.", "info");
                     }
                 });
 
                 return res;
             }
 
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $(".like-button").click(function() {
-                var newsId = $(this).data("news-id");
-                $.ajax({
-                    url: "/toggleLike",
-                    type: "POST",
-                    data: { newsId: newsId },
-                    success: function(response) {
-                        alert(response); // 좋아요 상태 변경 결과를 알림
-                    }
-                });
-            });
+            function getCategoryLabel(category) {
+                switch (category) {
+                    case "politics":
+                        return "\uD83C\uDF10 정치";
+                        break;
+                    case "economic":
+                        return "⚖\uFE0F 경제";
+                        break;
+                    case "society":
+                        return "\uD83E\uDD1D 사회";
+                        break;
+                    case "foreign":
+                        return "\uD83D\uDCB0 세계";
+                        break;
+                    case "all":
+                        return "전체";
+                        break;
+                    default:
+                        return "🔍️ 검색 결과";
+                        break;
+                }
+            }
+
         });
     </script>
 </head>
@@ -715,9 +766,12 @@
 </nav>
     <section class="news">
         <div class="news-category">
-            <h2><span role="img" aria-label="" class="emoji">${categoryLabel}</span>  </h2>
-            <%--<span>2024-01-20</span>--%>
-            <button id="play"></button>
+            <h1 class="category-title"></h1>
+            <div class="news-date"><input type="date" id="select-date"></div>
+            <!--
+            https://inpa.tistory.com/entry/JS-%F0%9F%93%9A-%EC%9D%8C%EC%95%85-%EA%B0%9D%EC%B2%B4Audio-%EB%8B%A4%EB%A3%A8%EA%B8%B0
+            https://velog.io/@soob1008/js-Audio-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+            -->
         </div>
         <div class="post-body">
             <!-- post-page 반복출력 -->
@@ -750,7 +804,6 @@
         </div>
         <nav class="posts-pagination">
             <button type="button" class="loadmore secondary-button">더보기</button>
-
         </nav>
     </section>
 </div>
