@@ -809,8 +809,15 @@
                 <p></p>
             </c:forEach>
         </div>
+        <!-- 페이지네이션을 위한 이전/다음 버튼 -->
         <nav class="posts-pagination">
-            <button type="button" class="loadmore secondary-button">더보기</button>
+            <!-- 현재 페이지가 1보다 큰 경우에만 이전 버튼 표시 -->
+            <c:if test="${currentPage > 1}">
+                <a href="/listpage?page=${currentPage - 1}" class="loadmore secondary-button">이전</a>
+            </c:if>
+
+            <!-- 다음 페이지 버튼 -->
+            <a href="/listpage?page=${currentPage + 1}" class="loadmore secondary-button">다음</a>
         </nav>
     </section>
 </div>
