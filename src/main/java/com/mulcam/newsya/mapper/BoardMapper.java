@@ -22,10 +22,10 @@ public interface BoardMapper {
     @Select(" SELECT * FROM news WHERE DATE = #{date} ORDER BY ID DESC LIMIT 4 ")
     List<BoardDto> getAllNewsByDate(@Param("date") Date date);
 
-    @Select("SELECT * FROM news WHERE id >= #{id} ORDER BY id DESC LIMIT 4")
+    @Select("SELECT * FROM news WHERE id >= #{id} ORDER BY id ASC LIMIT 4")
     List<BoardDto> getArticleListStartingFromId(@Param("id") int id);
 
-    @Select("SELECT * FROM news WHERE id >= #{id} AND category = #{category} ORDER BY id DESC LIMIT 4")
+    @Select("SELECT * FROM news WHERE id >= #{id} AND category = #{category} ORDER BY id ASC LIMIT 4")
     List<BoardDto> getArticleListStartingFromIdAndCategory(@Param("id") int id, @Param("category") String category);
 
 }
