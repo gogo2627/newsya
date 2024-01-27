@@ -52,7 +52,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 0;
-            padding: 3rem 5% 2.5rem 5%;
+            padding: 5% 5%;
         }
 
         .navbar-menu{
@@ -174,6 +174,7 @@
             max-width: 560px;
             font-size: 1.5rem;
             color: rgb(255,255,255);
+            font: inherit;
         }
 
         .search-tab{
@@ -189,7 +190,6 @@
             border-radius: 0 10px 10px 0;
             background: white;
             cursor: pointer;
-            font: inherit;
             width: 55.5px;
             height: 55.5px;
             display: flex;
@@ -621,7 +621,11 @@
     </header>
     <nav class="category" role="navigation">
         <div class="category-inner">
-            <a class="category-link" href="/category/all">전체</a>
+            <a class="category-link" href="/category/all">
+                <span role="img">&#127756;</span>
+                    전체
+                </span>
+            </a>
             <a class="category-link" href="/category/politics">
                 <span>
                     <span role="img">⚖️</span>
@@ -642,7 +646,7 @@
             </a>
             <a class="category-link" href="/category/foreign">
                 <span>
-                    <span role="img">🌐</span>
+                    <span role="img">&#127757;</span>
                     세계
                 </span>
             </a>
@@ -834,7 +838,7 @@
         </div>
 
         <div class="news-category">
-            <h2>🌐 세계</h2>
+            <h2>&#127757; 세계</h2>
             <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>

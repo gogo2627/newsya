@@ -54,7 +54,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 0;
-            padding: 3rem 5% 2.5rem 5%;
+            padding: 5% 5%;
         }
 
         .navbar-menu{
@@ -92,7 +92,7 @@
         .navbar-user-info > button{
             border: none;
             text-align: center;
-            margin: 0 0 0 5px;
+            margin: 10px 0 10px 5px;
             padding: 3px 5px;
             border-radius: 10px;
             background-color: #ff1678;
@@ -102,17 +102,6 @@
             font-size: 1rem;
             font-weight: 500px;
             text-align: right;
-        }
-
-        @media screen and (max-width: 750px){ /* 화면크기가 750px 이하면 로그인했을때 로그인 정보 숨긴다. */
-            /* (기본적으로 화면 조건 설정할 때, 화면 크기는 margin까지 포함한 크기이다.) */
-            .navbar-user-info{
-                display: none;
-            }
-
-            #bullhorn{
-                display:none;
-            }
         }
 
         .intro-head{
@@ -250,22 +239,6 @@
             padding: 1.25rem 0px;
             font-size: 1.5rem;
             font-weight: 500;
-            color: black;
-            cursor: pointer;
-        }
-
-
-        .category-link-active{
-            border-bottom: 3px solid black;
-        }
-
-        .category-link-active, .category-link{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 1rem;
-            padding: 1.25rem 0px;
-            font-size: 1.125rem;
             color: black;
             cursor: pointer;
         }
@@ -489,17 +462,19 @@
             background: #fff;
             color: #051619;
         }
+
         button {
             padding: 0;
             border: none;
             background: none;
             cursor: pointer;
-            /*font: inherit;*/
             position: relative;
         }
+
         .secondary-button:focus:not(:disabled), .secondary-button:hover:not(:disabled) {
             background: #ff1678;
         }
+
         .loadmore {
             display: block;
             margin: 0 auto;
@@ -731,10 +706,10 @@
                         return "\uD83E\uDD1D 사회";
                         break;
                     case "foreign":
-                        return "\uD83C\uDF10 세계";
+                        return "&#127757 세계";
                         break;
                     case "all":
-                        return "전체";
+                        return "&#127756 전체";
                         break;
                     default:
                         return "🔍️ 검색 결과";
@@ -746,24 +721,56 @@
     </script>
 </head>
 <body>
-<nav class="navbar" role="navigation">
-    <div class="navbar-inner">
-        <div class="navbar-menu" role="navigation"></div>
-        <a class="navbar-logo" href="/">
-            <img id="logo" src="${pageContext.request.contextPath}/resources/image/NewsYaLogo.png">
-        </a>
-        <div class="navbar-user">
-            <a class="navbar-user-login" href="/goLogin">
-                <img id="login" src="${pageContext.request.contextPath}/resources/image/Login.png">
+    <nav class="navbar" role="navigation">
+        <div class="navbar-inner">
+            <div class="navbar-menu" role="navigation"></div>
+            <a class="navbar-logo" href="/">
+                <img id="logo" src="${pageContext.request.contextPath}/resources/image/NewsYaLogo.png">
             </a>
-            <div class="navbar-user-info">
-                <p id="user-name">${sessionScope.id}님</p>
-                <button id="logout">로그아웃</button>
-                <button id="mypage">마이페이지</button>
+            <div class="navbar-user">
+                <a class="navbar-user-login" href="/goLogin">
+                    <img id="login" src="${pageContext.request.contextPath}/resources/image/Login.png">
+                </a>
+                <div class="navbar-user-info">
+                    <p id="user-name">${sessionScope.id}님</p>
+                    <button id="logout">로그아웃</button>
+                    <button id="mypage">마이페이지</button>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+    <nav class="category" role="navigation">
+        <div class="category-inner">
+            <a class="category-link" href="/category/all">
+                <span role="img">&#127756;</span>
+                전체
+            </a>
+            <a class="category-link" href="/category/politics">
+                <span>
+                    <span role="img">⚖️</span>
+                    정치
+                </span>
+            </a>
+            <a class="category-link" href="/category/economic">
+                <span>
+                    <span role="img">💰</span>
+                    경제
+                </span>
+            </a>
+            <a class="category-link" href="/category/society">
+                <span>
+                    <span role="img">🤝</span>
+                    사회
+                </span>
+            </a>
+            <a class="category-link" href="/category/foreign">
+                <span>
+                    <span role="img">&#127757;</span>
+                    세계
+                </span>
+            </a>
+        </div>
+    </nav>
     <section class="news">
         <div class="news-category">
             <h1 class="category-title"></h1>
