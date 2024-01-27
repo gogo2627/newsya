@@ -24,7 +24,7 @@ public interface BoardMapper {
 
     @Select("SELECT * FROM news WHERE id >= #{id} ORDER BY id ASC LIMIT 4")
     List<BoardDto> getArticleListStartingFromId(@Param("id") int id);
-
+ 
     @Select("SELECT * FROM news WHERE id >= #{id} AND category = #{category} ORDER BY id ASC LIMIT 4")
     List<BoardDto> getArticleListStartingFromIdAndCategory(@Param("id") int id, @Param("category") String category);
 
