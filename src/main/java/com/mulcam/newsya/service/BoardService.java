@@ -2,6 +2,7 @@ package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.BoardDto;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface BoardService {
@@ -10,5 +11,8 @@ public interface BoardService {
 
     List<BoardDto> getNewsByCategory(String category);
 
-    void toggleLike(int newsId, String userId);
+    List<BoardDto> getSpecificDateNewsByCategory(String category, Date date);
+
+    List<BoardDto> getAllNewsByDate(Date date);
+
 }
