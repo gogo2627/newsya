@@ -845,7 +845,7 @@
         </div>
         <div class="posts">
             <c:forEach var="flist" items="${flist}">
-            <a class="card" href="/category/foreign/article/${flist}">
+            <a class="card" href="/category/foreign/article/${flist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${flist.img}">
