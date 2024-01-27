@@ -29,9 +29,6 @@ public interface SearchMapper {
     @Select(" SELECT ID, TITLE, CONTENT, IMG, DATE FROM (SELECT * FROM news WHERE (DATE_FORMAT(NOW(), '%H:%i:%s') < '09:00:00' AND DATE = (CURDATE() - INTERVAL 1 DAY)) OR (DATE_FORMAT(NOW(), '%H:%i:%s') >= '09:00:00' AND DATE = CURDATE())) AS TODAY WHERE CATEGORY = 'politics' ORDER BY DATE DESC LIMIT 4 ")
     List<SearchDto> getPoliticsArticle();
 
-    @Select(" SELECT TITLE, CONTENT, IMG, DATE FROM news WHERE ID = #{id} ")
-    List<SearchDto> getMainArticle(String id);
-
     @Select(" SELECT POLITICS, `FOREIGN`, ECONOMIC, SOCIAL FROM CATEGORY WHERE ID = #{id} ")
     List<InterestDto> getInterest(String id);
 

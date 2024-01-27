@@ -44,10 +44,7 @@ public class SearchServiceImpl implements SearchService{
         return sm.getPoliticsArticle();
     }
 
-    @Override
-    public List<SearchDto> getMainArticle(String id) {
-        return sm.getMainArticle(id);
-    }
+
 
     @Override
     public List<InterestDto> getInterest(String id) {

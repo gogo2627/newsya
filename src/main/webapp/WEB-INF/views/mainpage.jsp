@@ -661,7 +661,7 @@
         </div>
         <div class="posts">
             <c:forEach var="plist" items="${plist}">
-            <a class="card" href="/article/${plist.id}">
+            <a class="card" href="/category/politics/article/${plist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${plist.img}">
@@ -723,7 +723,7 @@
         </div>
         <div class="posts">
             <c:forEach items="${elist}" var="elist">
-            <a class="card" href="/article/${elist.id}">
+            <a class="card" href="/category/economic/article/${elist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${elist.img}">
@@ -784,7 +784,7 @@
         </div>
         <div class="posts">
             <c:forEach var="slist" items="${slist}">
-            <a class="card" href="/article/${slist.id}">
+            <a class="card" href="/category/society/article/${slist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${slist.img}">
@@ -845,7 +845,7 @@
         </div>
         <div class="posts">
             <c:forEach var="flist" items="${flist}">
-            <a class="card" href="/article/${flist}">
+            <a class="card" href="/category/foreign/article/${flist}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${flist.img}">

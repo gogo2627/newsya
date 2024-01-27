@@ -15,4 +15,7 @@ public interface BoardService {
 
     List<BoardDto> getAllNewsByDate(Date date);
 
+    List<BoardDto> getArticleListStartingFromId(int id);
+
+    List<BoardDto> getArticleListStartingFromIdAndCategory(int id, String category);
 }

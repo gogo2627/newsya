@@ -38,4 +38,14 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getAllNewsByDate(date);
     }
 
+    @Override
+    public List<BoardDto> getArticleListStartingFromId(int id) {
+        return boardMapper.getArticleListStartingFromId(id);
+    }
+
+    @Override
+    public List<BoardDto> getArticleListStartingFromIdAndCategory(int id, String category) {
+        return boardMapper.getArticleListStartingFromIdAndCategory(id, category);
+    }
+
 }

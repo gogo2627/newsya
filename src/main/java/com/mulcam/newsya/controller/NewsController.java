@@ -59,6 +59,22 @@ public class NewsController {
         return "listpage";
     }
 
+    @RequestMapping("/category/{category}/article/{id}")
+    public String getArticleListStartingFromId(@PathVariable("category") String category, @PathVariable("id") int id, Model model) {
+        List<BoardDto> articleList;
+
+        if (category.equals("all")) {
+            articleList = boardService.getArticleListStartingFromId(id);
+        } else {
+            articleList = boardService.getArticleListStartingFromIdAndCategory(id, category);
+        }
+
+        model.addAttribute("boardList", articleList);
+        model.addAttribute("categoryLabel", category);
+        return "listpage";
+    }
+
+
     @RequestMapping("/category/{category}/date={date}")
     public String getSpecificDateCategoryNews(@PathVariable("category") String category, @PathVariable("date") Date date, Model model){
 

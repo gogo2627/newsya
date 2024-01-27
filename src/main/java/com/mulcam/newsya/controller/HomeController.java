@@ -58,15 +58,6 @@ public class HomeController {
         return "listpage"; // listpage.jsp로 이동
     }
 
-    @RequestMapping("/article/{id}")
-    public String newsClickFromMain(@PathVariable("id")String id, Model model){
-
-        List<SearchDto> article = ss.getMainArticle(id);
-
-        model.addAttribute("article", article);
-        return "한빈님 기사 요약 페이지명";
-    }
-
     @RequestMapping("/getInterest")
     @ResponseBody
     public Map<String, Boolean[]> getInterest(@RequestBody InterestDto idto){

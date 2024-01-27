@@ -722,16 +722,16 @@
             function getCategoryLabel(category) {
                 switch (category) {
                     case "politics":
-                        return "\uD83C\uDF10 정치";
+                        return "⚖\uFE0F 정치";
                         break;
                     case "economic":
-                        return "⚖\uFE0F 경제";
+                        return "\uD83D\uDCB0 경제";
                         break;
                     case "society":
                         return "\uD83E\uDD1D 사회";
                         break;
                     case "foreign":
-                        return "\uD83D\uDCB0 세계";
+                        return "\uD83C\uDF10 세계";
                         break;
                     case "all":
                         return "전체";
