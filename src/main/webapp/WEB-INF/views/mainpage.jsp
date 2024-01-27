@@ -604,7 +604,7 @@
     </header>
     <nav class="category" role="navigation">
         <div class="category-inner">
-            <a class="category-link" href="/listpage">전체</a>
+            <a class="category-link" href="/category/all">전체</a>
             <a class="category-link" href="/category/economic">
                 <span>
                     <span role="img">⚖️</span>

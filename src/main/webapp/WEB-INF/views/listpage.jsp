@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,9 +25,17 @@
         }
 
         body{
+            font-family: 'JalnanGothic';
             background-color: #fff6f6;
             letter-spacing: -.0125rem;
             margin: 0px;
+        }
+
+        @font-face {
+            font-family: 'JalnanGothic';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
         }
 
         *{
@@ -37,7 +46,7 @@
         .navbar{
             background: #fff6f6;
             position: relative;
-            background-color: #FEDBEA;
+            border-bottom: 1px solid black;
         }
 
         .navbar .navbar-inner{
@@ -80,6 +89,32 @@
             box-sizing: border-box;
         }
 
+        .navbar-user-info > button{
+            border: none;
+            text-align: center;
+            margin: 0 0 0 5px;
+            padding: 3px 5px;
+            border-radius: 10px;
+            background-color: #ff1678;
+        }
+
+        .navbar-user-info > p{
+            font-size: 1rem;
+            font-weight: 500px;
+            text-align: right;
+        }
+
+        @media screen and (max-width: 750px){ /* 화면크기가 750px 이하면 로그인했을때 로그인 정보 숨긴다. */
+            /* (기본적으로 화면 조건 설정할 때, 화면 크기는 margin까지 포함한 크기이다.) */
+            .navbar-user-info{
+                display: none;
+            }
+
+            #bullhorn{
+                display:none;
+            }
+        }
+
         .intro-head{
             position: relative;
             cursor: default;
@@ -111,7 +146,7 @@
         .intro-head-banner{
             position: relative;
             padding: 2rem 0 3rem;
-            background-color: black;
+            background-color: #ff1678;
             box-sizing: border-box;
         }
 
@@ -138,8 +173,8 @@
 
         .search-tab, .intro-inner > p{
             max-width: 560px;
-            font-size: 1.125rem;
-            color: hotpink;
+            font-size: 1.15rem;
+            color: rgb(255,255,255);
         }
 
         .search-tab{
@@ -201,6 +236,25 @@
             overflow: overlay; /* https://developer.mozilla.org/ko/docs/Web/CSS/overflow */
         }
 
+
+        .category-link:hover{
+            color: #ff6b00;
+            /*border-bottom: 3px solid black;*/
+        }
+
+        .category-link{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2rem;
+            padding: 1.25rem 0px;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: black;
+            cursor: pointer;
+        }
+
+
         .category-link-active{
             border-bottom: 3px solid black;
         }
@@ -250,6 +304,10 @@
             border: none;
             box-sizing: border-box;
             cursor: pointer;
+        }
+
+        #interest-plus{
+            display: none;
         }
 
         .posts{
@@ -319,12 +377,26 @@
             font-size: 1.25rem;
         }
 
+        .card .card-body .card-title{
+            margin: 0 0 0.5rem;
+            font-size: 1.25rem;
+            word-wrap: break-word;
+            overflow: hidden;
+            white-space: normal;
+            text-overflow: ellipsis;
+            text-align: left;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical
+            /* https://velog.io/@syoung125/CSS-text-overflow-ellipsis-%EB%91%90%EC%A4%84-%EC%9D%B4%EC%83%81-%EC%B2%98%EB%A6%AC */
+        }
+
         .footer{
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
             margin: 0 auto;
-            padding: 4rem 5% 6rem;
+            padding: 4rem 8% 6rem;
             background-color: black;
             box-sizing: border-box;
             position: relative;
@@ -389,6 +461,9 @@
             margin: 0;
         }
 
+        .navbar-user-info{
+            display: none }
+
         /*위에는 승주님이 적으신 css*/
         button:not(:active), button:not(:focus) {
             outline: 0;
@@ -414,7 +489,7 @@
             border: none;
             background: none;
             cursor: pointer;
-            font: inherit;
+            /*font: inherit;*/
             position: relative;
         }
         .secondary-button:focus:not(:disabled), .secondary-button:hover:not(:disabled) {
@@ -500,7 +575,7 @@
 
         .post-page {
             border-top: solid 1px;
-            padding-top: 20px;
+            padding: 20px;
             text-align: center;
         }
         .post-image {
@@ -529,6 +604,140 @@
         }
 
     </style>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+
+            if("${msg}" != null && "${msg}" != "") {
+                swal({
+                    text:"${msg}",
+                    icon: "info",
+                    button: "OK",
+                });
+            }
+
+            // 로그인 상태
+            if("${sessionScope.id}".length > 0){
+
+                let ajaxRes;
+                let url = "";
+
+
+
+                // 로그인 정보 띄우기
+                $(".navbar-user-login").hide();
+                $(".navbar-user-info").css("display", "flex");
+                /*
+                const id = {"id": "${sessionScope.id}"};
+                // ajax로 관심분야 갖고오기(배열값 리턴 받는다.)
+                ajaxRes = Ajax(url, id);
+
+                // 미리 누른 관심분야는 V 표시
+                // each의 index와 interest 클래스와 eq를 사용해 hide, show
+                $.each(ajaxRes, function(index, element){
+                    if(ajaxRes[index] == 1){
+                        $(".interest:eq(" + index + ") > span:eq(0)").css("display", "none");
+                        $(".interest:eq(" + index + ") > span:eq(1)").css("display", "inline");
+                    }
+                });
+
+                $(".interest").click(function(){
+                    let url = "";
+
+                    // 변경사항 db에 저장
+                    let res = {"index":Index($(".interest").index(this))};
+                    let ajaxRes = Ajax(url, res);
+                    // 정치를 눌렀다면 백으로 정치라는 단어를 보내주고,
+                    // db에 정치가 있으면 삭제, 없다면 추가
+
+                    // + -> V로, V -> +로
+                    if ($(this).find("> span:eq(0)").css("display") == "none") {
+                        $(this).find("> span:eq(0)").css("display", "inline");
+                        $(this).find("> span:eq(1)").css("display", "none");
+                    } else {
+                        $(this).find("> span:eq(0)").css("display", "none");
+                        $(this).find("> span:eq(1)").css("display", "inline");
+                    }
+
+                });
+                */
+            }else{ // 비로그인 상태
+                $(".interest").click(function(){
+                    window.location.href="/goLogin"; // 로그인 페이지로
+                });
+            }
+
+            // 로그아웃
+            $("#logout").click(function(){
+                console.log("logout");
+                window.location.href="/logout";
+            });
+
+            // 마이페이지
+            $("#mypage").click(() => {
+                location.href="/goMyPage";
+            });
+
+            function Ajax(url, tmp){
+
+                let res;
+
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: JSON.stringify(tmp),
+                    dataType: "json",
+                    applicationType: "application/json",
+                    success: function(msg){
+                        res = meg.res;
+                    },
+                    error: function(){
+
+                    }
+                });
+
+                return res;
+            }
+
+            function Index(index){
+
+                let res;
+
+                switch(index){
+                    case "0":
+                        res = "politics";
+                        break;
+                    case "1":
+                        res = "economy";
+                        break;
+                    case "2":
+                        res = "social";
+                        break;
+                    case "3":
+                        res = "world";
+                        break;
+                }
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(".like-button").click(function() {
+                var newsId = $(this).data("news-id");
+                $.ajax({
+                    url: "/toggleLike",
+                    type: "POST",
+                    data: { newsId: newsId },
+                    success: function(response) {
+                        alert(response); // 좋아요 상태 변경 결과를 알림
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <nav class="navbar" role="navigation">
@@ -552,14 +761,14 @@
     <section class="news">
         <div class="news-category">
             <h2><span role="img" aria-label="" class="emoji">${categoryLabel}</span>  </h2>
-            <span>2024-01-20</span>
+            <%--<span>2024-01-20</span>--%>
             <button id="play"></button>
         </div>
         <div class="post-body">
             <!-- post-page 반복출력 -->
             <c:forEach var="board" items="${boardList}">
             <div class="post-page">
-                <span >${board.date}</span>
+                <span ><fmt:formatDate value="${board.date}" pattern="yyyy-MM-dd" /></span>
                 <h2>${board.title}</h2>
                 <div class="post-image">
                     <img src="${board.img}" alt="" loading="lazy">
@@ -570,39 +779,15 @@
                     <span>${board.content}</span>
                 </div>
                 <div class="post-icons">
-                    <a href="좋아요"><img src="${pageContext.request.contextPath}/resources/image/yes.png"></a>
-                    <a href="싫어요"><img src="${pageContext.request.contextPath}/resources/image/no.png"></a>
+                    <a href="#" class="like-button" data-news-id="${board.id}">
+                        <img src="${pageContext.request.contextPath}/resources/image/yes.png">
+                    </a>
                     <a href="댓글"><img src="${pageContext.request.contextPath}/resources/image/reply.png"></a>
                     <a href="공유"><img src="${pageContext.request.contextPath}/resources/image/share.png"></a>
                 </div>
 
                 <div class="reply">
-                    <h3 style="text-align: left;">댓글 10개</h3>
-                    <!-- 댓글 갯수 불러오기 -->
-                    <form action="reply">
-                        <input type="text" class="reply-input" placeholder="댓글을 남겨주세요. 뉴스야는 독자 여러분의 의견을 경청하겠습니다." width="100%">
-                        <button type="submit" class="reply-submit">작성</button>
-                    </form>
-                    <div class="reply-list">
-                        <div class="reply-content">
-                            <span class="reply-name">HB</span> <span class="reply-date">11:44:55</span>
-                            <span class="reply-comment">인생을 풍부하게 하는 온갖 과실이 어디 있으랴?</span>
-                            <div class="reply-icons">
-                                <a href="좋아요"><img src="image/yes.png"></a>
-                                <a href="싫어요"><img src="image/no.png"></a>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="reply-content">
-                            <span class="reply-name">HB</span> <span class="reply-date">11:44:55</span>
-                            <span class="reply-comment">인생을 풍부하게 하는 온갖 과실이 어디 있으랴?</span>
-                            <div class="reply-icons">
-                                <a href="좋아요"><img src="image/yes.png"></a>
-                                <a href="싫어요"><img src="image/no.png"></a>
-                            </div>
-                        </div>
 
-                    </div><div class="paging">  </div>
                 </div>
             </div>
                 <p></p>

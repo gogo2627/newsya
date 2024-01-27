@@ -27,5 +27,11 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getNewsByCategory(category);
     }
 
+    @Override
+    public void toggleLike(int newsId, String userId) {
+        // 좋아요 토글 기능 추가
+        boardMapper.toggleLike(newsId, userId);
+    }
+
 
 }

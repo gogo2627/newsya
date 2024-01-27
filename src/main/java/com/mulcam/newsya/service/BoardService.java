@@ -9,4 +9,6 @@ public interface BoardService {
     public List<BoardDto> getAllBoards();
 
     List<BoardDto> getNewsByCategory(String category);
+
+    void toggleLike(int newsId, String userId);
 }
