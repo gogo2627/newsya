@@ -25,7 +25,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	// https://velog.io/@ogu1208/JDBC-SpringBoot%EC%99%80-JDBC-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-	// implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	implementation 'net.nurigo:sdk:4.2.7'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
@@ -37,9 +36,9 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	compileOnly 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
 	testCompileOnly 'org.projectlombok:lombok:1.18.30'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 }
 
