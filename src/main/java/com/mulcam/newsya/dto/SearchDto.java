@@ -22,10 +22,11 @@ public class SearchDto {
     private String content; // 검색 결과 해당 기사 내용
     private String img; // 검색 결과 해당 기사 이미지
     private Date date;
+    private String url;
 
     @Override
     public String toString(){
-        return "제목 : " + this.title + "\n" + "내용 : " + this.content + "\n" + "이미지 : " + this.img + "\n" + "날짜 : " + this.date;
+        return "URL: " + url + "제목 : " + this.title + "\n" + "내용 : " + this.content + "\n" + "이미지 : " + this.img + "\n" + "날짜 : " + this.date;
     }
 
 }

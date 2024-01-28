@@ -380,11 +380,11 @@ pageEncoding="UTF-8"%>
 
             // 비밀번호 입력 감지해 형식에 맞으면서 둘 다 일치하면 체크마크 아니면 x마크 보이기
             // https://karismamun.tistory.com/66
-            $("#pw").on("keyup", () => {
+            $("#newpw").on("keyup", () => {
 
                 console.log("비번 체크 " + pwCheck);
 
-                if(pwChk($("#pw").val()) === 1){
+                if(pwChk($("#newpw").val()) === 1){
 
                     $(".true").css("display", "flex");
                     $(".false").hide();
@@ -599,7 +599,7 @@ pageEncoding="UTF-8"%>
                     </div>
                 </div>
                 <div class="pw-change">
-                     <input type="password" name="password" id="pw" class="finding-input" maxlength="20" placeholder="새 비밀번호 입력">
+                     <input type="password" name="password" id="newpw" class="finding-input" maxlength="20" placeholder="새 비밀번호 입력">
                      <div class="true"><i class="fa-solid fa-check" id="check-mark" style="color: #45ca21;"></i></div>
                      <div class="false"><i class="fa-regular fa-circle-xmark" id="x-mark" style="color: #f60404;"></i></div>
                  </div>

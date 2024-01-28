@@ -54,7 +54,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 0;
-            padding: 5% 5%;
+            padding: 3rem 5%;
         }
 
         .navbar-menu{
@@ -624,8 +624,6 @@
                 $(".news-date").hide();
             }
 
-
-
             // 각 분야 목록 페이지에 어떤 목록인지 이모티콘과 함께 표시.
             $(".category-title").html(getCategoryLabel("${categoryLabel}"));
 
@@ -669,6 +667,9 @@
                     data: { newsId: newsId },
                     success: function(response) {
                         alert(response); // 좋아요 상태 변경 결과를 알림 // sweetalert api 사용하는 코드로 수정해주세요.
+                    },
+                    error:function(){
+                        swal("통신 에러", "다시 시도해주세요.", "info");
                     }
                 });
             });
@@ -780,17 +781,18 @@
             https://velog.io/@soob1008/js-Audio-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
             -->
         </div>
-        <div class="post-body">
+
+        <div class="post-body" id="post-container">
             <!-- post-page 반복출력 -->
+
             <c:forEach var="board" items="${boardList}">
             <div class="post-page">
                 <span ><fmt:formatDate value="${board.date}" pattern="yyyy-MM-dd" /></span>
                 <h2>${board.title}</h2>
                 <div class="post-image">
                     <img src="${board.img}" alt="" loading="lazy">
-
                 </div>
-                <div style="margin-bottom: 20px;"><span><%--[사진-뉴윅]--%></span></div>
+                <div style="margin-bottom: 20px;"></div>
                 <div class="card-body">
                     <span>${board.content}</span>
                 </div>
@@ -808,7 +810,9 @@
             </div>
                 <p></p>
             </c:forEach>
+
         </div>
+
         <nav class="posts-pagination">
             <button type="button" class="loadmore secondary-button">더보기</button>
         </nav>

@@ -38,11 +38,13 @@ public class HomeController {
         List<SearchDto> flist = ss.getForeignArticle();
         List<SearchDto> slist = ss.getSocialArticle();
         List<SearchDto> plist = ss.getPoliticsArticle();
+        List<String> ulist = ss.getUrlFromArticle();
 
         model.addAttribute("elist", elist);
         model.addAttribute("flist", flist);
         model.addAttribute("slist", slist);
         model.addAttribute("plist", plist);
+        model.addAttribute("ulist", ulist);
 
         return "mainpage";
     }

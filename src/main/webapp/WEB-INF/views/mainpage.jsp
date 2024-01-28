@@ -52,7 +52,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 0;
-            padding: 5% 5%;
+            padding: 3rem 5%;
         }
 
         .navbar-menu{
@@ -152,9 +152,10 @@
         .intro-bullhorn{
             position: absolute;
             left: 50%;
+            transform: translateX(-50%);
             width: 100%;
             max-width: 250px;
-            margin-left: 200px;
+            margin-left: 20%;
         }
 
         #bullhorn{
@@ -254,6 +255,19 @@
 
         a, abbr{
             text-decoration: none;
+        }
+
+        .audioControl{
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            margin: 0
+            padding: 0;
+        }
+
+        #mainAudio{
+            padding: 0;
+            margin: 1%;
         }
 
         .news{
@@ -436,12 +450,19 @@
             display: none;
         }
 
+        button{
+            border: none;
+            background-color: #fff6f6;
+        }
+
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
 
         $(function(){
+
+            let isPlaying = false;
 
              if("${msg}" != null && "${msg}" != "") {
                 swal({
@@ -516,6 +537,39 @@
             $("#mypage").click(() => {
                 location.href="/goMyPage";
             });
+
+            $("#mainAudio").click(() => {
+
+                let urlList = [];
+
+                "${ulist}".replace(/^\[|\]$/g, '').split(',').forEach((element, index) => {
+                    // urlList.push("https://kr.object.ncloudstorage.com/newsya/" + element + ".mp3");
+                    urlList.push("https://kr.object.ncloudstorage.com/newsya/economic_20240126104512638.mp3");
+                });
+
+                // 오디오 순차 재생
+                function playAudioSequentially(index) {
+
+                    if(index < urlList.length){
+
+                        var audio = new Audio(urlList[index].trim());
+
+                        audio.addEventListener('ended', function(){
+                            console.log("재생 횟수 : " + index);
+                            indexChk = index + 1;
+                            playAudioSequentially(index + 1);
+                        });
+
+                        audio.play();
+                    }
+
+                }
+
+                playAudioSequentially(0);
+
+            });
+
+
 
             function Ajax(url, val){
 
@@ -595,7 +649,6 @@
                 시간이 없어?
                 <span class="mobile-block">그럼 핵심만 알려줄게!</span>
             </div>
-
         </h1>
         <div class="intro-head-banner">
             <div class="intro-bullhorn">
@@ -653,6 +706,9 @@
         </div>
     </nav>
     <section class="news">
+        <div class="audioControl">
+            <button id="mainAudio">▶</button>
+        </div>
         <div class="news-category">
             <h2>⚖️ 정치</h2>
             <!--
