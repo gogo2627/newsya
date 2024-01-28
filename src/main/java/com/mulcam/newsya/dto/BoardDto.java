@@ -84,5 +84,8 @@ public class BoardDto {
     public void setDate(Date date) {
         this.date = date;
     }
+
+
+
 }
 

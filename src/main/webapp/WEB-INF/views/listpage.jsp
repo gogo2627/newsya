@@ -721,6 +721,22 @@
     </script>
 </head>
 <body>
+
+
+
+<button id="playAllButton">모든 음악 재생</button>
+
+
+
+
+
+
+
+
+
+
+
+
     <nav class="navbar" role="navigation">
         <div class="navbar-inner">
             <div class="navbar-menu" role="navigation"></div>
@@ -792,6 +808,7 @@
                 </div>
                 <div style="margin-bottom: 20px;"><span><%--[사진-뉴윅]--%></span></div>
                 <div class="card-body">
+                    <span>${board.url}</span>
                     <span>${board.content}</span>
                 </div>
                 <div class="post-icons">
@@ -821,5 +838,41 @@
         </nav>
     </section>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        // 음악 파일 주소 배열 초기화
+        var audioUrls = [];
+
+        // 각 게시물의 카테고리와 URL 정보를 가져와서 음악 파일 주소를 생성하여 배열에 추가
+        <c:forEach var="board" items="${boardList}">
+        // URL에서 마지막 숫자만 추출
+        var url = "${board.url}";
+        var lastIndex = url.lastIndexOf("/") + 1;
+        var filename = url.substring(lastIndex);
+        var category = "${board.category}";
+        var audioUrl = "https://kr.object.ncloudstorage.com/newsya/" + category + "_" + filename + ".mp3";
+
+        // 생성된 주소를 배열에 추가
+        audioUrls.push(audioUrl);
+
+        // 생성된 음악 파일 경로를 콘솔에 출력
+        console.log("Audio URL for " + category + ": " + audioUrl);
+        </c:forEach>
+
+        // 모든 음악 파일을 재생하는 버튼 클릭 시
+        $("#playAllButton").click(function() {
+            // 각 음악 파일 주소를 순회하면서 재생
+            audioUrls.forEach(function(url) {
+                // 동적으로 오디오 요소 생성하여 음악 파일 재생
+                var audio = new Audio(url);
+                audio.play();
+            });
+        });
+
+    });
+</script>
+
+
 </body>
 </html>
