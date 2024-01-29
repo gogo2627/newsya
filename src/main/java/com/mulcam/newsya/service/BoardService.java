@@ -18,6 +18,4 @@ public interface BoardService {
     List<BoardDto> getArticleListStartingFromId(int id);
 
     List<BoardDto> getArticleListStartingFromIdAndCategory(int id, String category);
-
-    List<BoardDto> getLimitedBoards(int offset, int limit);
 }

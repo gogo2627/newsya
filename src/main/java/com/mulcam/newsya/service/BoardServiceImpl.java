@@ -48,9 +48,4 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getArticleListStartingFromIdAndCategory(id, category);
     }
 
-    @Override
-    public List<BoardDto> getLimitedBoards(int offset, int limit) {
-        return boardMapper.getLimitedBoards(offset, limit);
-    }
-
 }

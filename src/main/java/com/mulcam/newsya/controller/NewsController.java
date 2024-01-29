@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
 import java.util.List;
@@ -29,15 +28,14 @@ public class NewsController {
 
 
     @RequestMapping("/listpage")
-    public String getAllNews(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-        int pageSize = 4; // 페이지당 보여줄 게시물 수
-        int offset = (page - 1) * pageSize; // 오프셋 계산
+    public String getAllNews(Model model) {
+        List<BoardDto> boardList = boardService.getAllBoards();
+        int limit = 15;
+        List<BoardDto> limitedNews = boardList.subList(0, Math.min(limit, boardList.size()));
+        model.addAttribute("boardList", limitedNews); // 모든 카테고리로 설정
 
-        List<BoardDto> boardList = boardService.getLimitedBoards(offset, pageSize);
-        model.addAttribute("boardList", boardList);
-
-        // 현재 페이지 번호 전달
-        model.addAttribute("currentPage", page);
+        // 카테고리 라벨 설정
+        model.addAttribute("categoryLabel", "all");
 
         return "listpage";
     }
