@@ -265,9 +265,18 @@
             padding: 0;
         }
 
-        #mainAudio{
-            padding: 0;
-            margin: 1%;
+        #audio{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        #pause{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        .fa-play, .fa-stop{
+            font-size: 1.5rem;
         }
 
         .news{
@@ -452,17 +461,24 @@
 
         button{
             border: none;
-            background-color: #fff6f6;
         }
 
     </style>
+    <script src="https://kit.fontawesome.com/0eba089d9e.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
 
         $(function(){
 
-            let isPlaying = false;
+            var audio = new Audio();
+            let urlList = []; // TTS 오디오 파일 url 주소 담을 배열
+            let index = 0; // TTS 오디오 파일 index
+
+            // 배열에 TTS 오디오 파일 주소 적재
+            "${ulist}".replace(/^\[|\]$/g, '').split(',').forEach((element, index) => {
+                urlList.push("https://kr.object.ncloudstorage.com/newsya/" + element.trim() + ".mp3");
+            });
 
              if("${msg}" != null && "${msg}" != "") {
                 swal({
@@ -538,37 +554,12 @@
                 location.href="/goMyPage";
             });
 
-            $("#mainAudio").click(() => {
+            $("#audio").click(() => {
+                playAudioSequentially(index, urlList);
+            });
 
-                let urlList = [];
-
-                "${ulist}".replace(/^\[|\]$/g, '').split(',').forEach((element, index) => {
-                    urlList.push("https://kr.object.ncloudstorage.com/newsya/" + element + ".mp3");
-                    // urlList.push("https://kr.object.ncloudstorage.com/newsya/economic_20240126104512638.mp3");
-                });
-
-                console.log(urlList);
-
-                // 오디오 순차 재생
-                function playAudioSequentially(index) {
-
-                    if(index < urlList.length){
-
-                        var audio = new Audio(urlList[index].trim());
-
-                        audio.addEventListener('ended', function(){
-                            console.log("재생 횟수 : " + index);
-                            indexChk = index + 1;
-                            playAudioSequentially(index + 1);
-                        });
-
-                        audio.play();
-                    }
-
-                }
-
-                playAudioSequentially(0);
-
+            $("#pause").click(() => {
+                audio.pause();
             });
 
             function Ajax(url, val){
@@ -620,8 +611,70 @@
                 console.log("인덱스 함수 결과 : " + res);
                 return res;
             }
+
+            // 오디오 순차 재생 함수
+            function playAudioSequentially(index, urlList) {
+
+                if(index < urlList.length){
+
+                    audio.src = urlList[index];
+
+                    // 오디오 파일 로딩 대기
+                    audio.addEventListener('canplaythrough', () => {
+                        audio.play();
+                    });
+
+                    // 오디오 재생 끝나면
+                    audio.addEventListener('ended', function onEnded() {
+                        index = index + 1;
+                        audio.removeEventListener('ended', onEnded);  // Remove the event listener
+                        playAudioSequentially(index, urlList);
+                    }, { once: true });
+
+                }else{
+                    index = 0;
+                }
+
+            }
+
+            function stopAudio(){
+                audio.pause();
+            }
         });
     </script>
+    <!--
+        문제:
+        playAudioSequentially 함수에서 한번 오디오 파일을 재생할 때마다 'ended' 이벤트에서 찍히는 로그의 개수가 2배씩 늘어나는 문제가 있었다.
+
+        원인과 해결:
+        The issue with the doubling of console log messages is likely due to the fact that the code snippet is inside an event listener that is called multiple times.
+        Every time the ended event is triggered (indicating that an audio file has finished playing),
+        the event listener is invoked, leading to the increase in the number of console log messages.
+
+        In your code:
+
+        audio.addEventListener('ended', function(){
+            console.log("재생 횟수 : " + index);
+            index = index + 1;
+            playAudioSequentially(index, urlList);
+        });
+
+        The ended event listener is calling the playAudioSequentially function recursively.
+        However, each time it does so, it attaches a new instance of the event listener to the ended event.
+        As a result, when the next audio file finishes playing, all the attached event listeners are invoked,
+        causing the console log messages to multiply.
+
+        To address this issue, you can consider removing the event listener before attaching a new one. One way to achieve this is by using the once option when attaching the event listener:
+
+        audio.addEventListener('ended', function onEnded() {
+            console.log("재생 횟수 : " + index);
+            index = index + 1;
+            audio.removeEventListener('ended', onEnded);  // Remove the event listener
+            playAudioSequentially(index, urlList);
+        }, { once: true });
+
+        By using { once: true }, you ensure that the event listener is automatically removed after it has been executed once. This should prevent the doubling of console log messages.
+    -->
 </head>
 <body>
 <div>
@@ -647,7 +700,7 @@
         <h1 class="intro-head-title">
             <div class="intro-inner">
                 시간이 없어?
-                <span class="mobile-block">그럼 핵심만 알려줄게!</span>
+                <span class="mobile-block">그럼 핵심만 들려줄게!</span>
             </div>
         </h1>
         <div class="intro-head-banner">
@@ -656,7 +709,7 @@
             </div>
             <div class="intro-inner">
                 <p>하루 하루 바쁘시죠?</p>
-                <p>그런 당신을 위해 우리가 핵심만 알려줄게요.</p>
+                <p>그런 당신을 위해 우리가 핵심만 들려줄게요.</p>
                 <br>
                 <p>바쁜 당신을 위한 뉴스 요약 서비스</p>
                 <div class="search-tab">
@@ -707,7 +760,8 @@
     </nav>
     <section class="news">
         <div class="audioControl">
-            <button id="mainAudio">▶</button>
+            <i id="audio" class="fa-solid fa-play" style="color: #ff1678;"></i>
+            <i id="pause" class="fa-solid fa-stop" style="color: #ff1678;"></i>
         </div>
         <div class="news-category">
             <h2>⚖️ 정치</h2>

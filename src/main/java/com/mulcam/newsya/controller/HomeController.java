@@ -60,6 +60,7 @@ public class HomeController {
         return "listpage"; // listpage.jsp로 이동
     }
 
+    /*
     @RequestMapping("/getInterest")
     @ResponseBody
     public Map<String, Boolean[]> getInterest(@RequestBody InterestDto idto){
@@ -85,7 +86,7 @@ public class HomeController {
 
         return msg;
     }
-
+    */
 }
 
 // 동적 매핑
