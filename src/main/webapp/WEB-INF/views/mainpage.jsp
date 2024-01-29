@@ -543,9 +543,10 @@
                 let urlList = [];
 
                 "${ulist}".replace(/^\[|\]$/g, '').split(',').forEach((element, index) => {
-                    // urlList.push("https://kr.object.ncloudstorage.com/newsya/" + element + ".mp3");
-                    urlList.push("https://kr.object.ncloudstorage.com/newsya/economic_20240126104512638.mp3");
+                    urlList.push("https://kr.object.ncloudstorage.com/newsya/" + element.trim() + ".mp3");
                 });
+
+                console.log(urlList);
 
                 // 오디오 순차 재생
                 function playAudioSequentially(index) {

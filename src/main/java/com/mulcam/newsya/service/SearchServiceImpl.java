@@ -48,6 +48,8 @@ public class SearchServiceImpl implements SearchService{
     public List<String> getUrlFromArticle() {
         return sm.getUrlFromArticle();
     }
+
+    /* 메인페이지 관심분야
     @Override
     public List<InterestDto> getInterest(String id) {
         sm.createCategoryTable();
@@ -79,5 +81,5 @@ public class SearchServiceImpl implements SearchService{
 
         return res;
     }
-
+    */
 }
