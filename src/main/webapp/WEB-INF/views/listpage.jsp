@@ -861,16 +861,16 @@
         </c:forEach>
 
         // 모든 음악 파일을 재생하는 버튼 클릭 시
-        $("#playAllButton").click(function () {
+        $("#playAllButton").click(function() {
             // 첫 번째 음악부터 순차적으로 재생 시작
             playAudioSequentially(0);
         });
 
         // 오디오 순차 재생 함수
         function playAudioSequentially(index) {
-            if (index < audioUrls.length) {
+            if(index < audioUrls.length) {
                 var audio = new Audio(audioUrls[index]);
-                audio.addEventListener('ended', function () {
+                audio.addEventListener('ended', function(){
                     console.log("재생 횟수 : " + index);
                     // 다음 음악 파일 재생을 위해 인덱스 증가 후 재귀 호출
                     playAudioSequentially(index + 1);
