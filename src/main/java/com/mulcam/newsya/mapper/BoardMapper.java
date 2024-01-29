@@ -28,4 +28,7 @@ public interface BoardMapper {
     @Select("SELECT * FROM news WHERE id >= #{id} AND category = #{category} ORDER BY id ASC LIMIT 4")
     List<BoardDto> getArticleListStartingFromIdAndCategory(@Param("id") int id, @Param("category") String category);
 
+    @Select("SELECT * FROM news ORDER BY DATE DESC LIMIT #{offset}, #{limit}")
+    List<BoardDto> getLimitedBoards(@Param("offset") int offset, @Param("limit") int limit);
+
 }
