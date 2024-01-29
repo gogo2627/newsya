@@ -35,10 +35,11 @@ public interface SearchMapper {
     @Select(" SELECT POLITICS, `FOREIGN`, ECONOMIC, SOCIAL FROM CATEGORY WHERE ID = #{id} ")
     List<InterestDto> getInterest(String id);
 
+    /*
     @Update(" UPDATE CATEGORY SET ${index} = NOT ${index} WHERE ID = #{id} ")
     int updateInterest(InterestDto idto);
 
     @Select(" SELECT ${index} FROM CATEGORY WHERE ID = #{id} ")
     String selectInterest(InterestDto idto);
-
+    */
 }
