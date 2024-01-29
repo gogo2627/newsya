@@ -15,6 +15,7 @@
             UPDATED_AT DATETIME
         );
     </update>
+
 </mapper>
 
         <!--

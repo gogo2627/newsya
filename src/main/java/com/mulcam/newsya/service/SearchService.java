@@ -20,6 +20,8 @@ public interface SearchService {
 
     public List<SearchDto> getPoliticsArticle();
 
+    public List<String> getUrlFromArticle();
+
     public List<InterestDto> getInterest(String id);
 
     public String updateInterest(InterestDto idto);

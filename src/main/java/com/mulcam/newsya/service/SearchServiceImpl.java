@@ -44,8 +44,10 @@ public class SearchServiceImpl implements SearchService{
         return sm.getPoliticsArticle();
     }
 
-
-
+    @Override
+    public List<String> getUrlFromArticle() {
+        return sm.getUrlFromArticle();
+    }
     @Override
     public List<InterestDto> getInterest(String id) {
         sm.createCategoryTable();
