@@ -1,3 +1,4 @@
+/*
 package com.mulcam.newsya.controller;
 
 import com.mulcam.newsya.dto.BoardDto;
@@ -12,12 +13,12 @@ import java.sql.Date;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
-public class NewsController {
+public class NewsController_ {
 
     private final BoardService boardService;
 
     @Autowired
-    public NewsController(BoardService boardService) {
+    public NewsController_(BoardService boardService) {
         this.boardService = boardService;
     }
 
@@ -72,42 +73,30 @@ public class NewsController {
     }
 
     @RequestMapping("/category/{category}/article/{id}")
-    public String getArticleListStartingFromId(@PathVariable("category") String category, @PathVariable("id") int id,
-                                               @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-        int pageSize = 4; // 페이지당 보여줄 게시물 수
-        int offset = (page - 1) * pageSize; // 오프셋 계산
-
+    public String getArticleListStartingFromId(@PathVariable("category") String category, @PathVariable("id") int id, Model model) {
         List<BoardDto> articleList;
 
         if (category.equals("all")) {
-            articleList = boardService.getArticleListStartingFromId(id, offset, pageSize);
+            articleList = boardService.getArticleListStartingFromId(id);
         } else {
-            articleList = boardService.getArticleListStartingFromIdAndCategory(id, category, offset, pageSize);
+            articleList = boardService.getArticleListStartingFromIdAndCategory(id, category);
         }
 
         model.addAttribute("boardList", articleList);
-
-        // 현재 페이지 번호 전달
-        model.addAttribute("currentPage", page);
-
         model.addAttribute("categoryLabel", category);
         return "listpage";
     }
 
 
     @RequestMapping("/category/{category}/date={date}")
-    public String getSpecificDateCategoryNews(@PathVariable("category") String category, @PathVariable("date") Date date,
-                                              @RequestParam(value = "page", defaultValue = "1") int page, Model model){
-
-        int pageSize = 4; // 페이지당 보여줄 게시물 수
-        int offset = (page - 1) * pageSize; // 오프셋 계산
+    public String getSpecificDateCategoryNews(@PathVariable("category") String category, @PathVariable("date") Date date, Model model){
 
         List<BoardDto> categoryNews;
 
         if(category.equals("all")){
-            categoryNews = boardService.getAllNewsByDate(date, offset, pageSize);
+            categoryNews = boardService.getAllNewsByDate(date);
         }else{
-            categoryNews = boardService.getSpecificDateNewsByCategory(category, date, offset, pageSize);
+            categoryNews = boardService.getSpecificDateNewsByCategory(category, date);
         }
 
         if(categoryNews.size() > 0){
@@ -116,9 +105,6 @@ public class NewsController {
             model.addAttribute("msg", "검색 결과가 없습니다.");
         }
 
-        // 현재 페이지 번호 전달
-        model.addAttribute("currentPage", page);
-
         // 카테고리 라벨 설정
         model.addAttribute("categoryLabel", category);
         model.addAttribute("date", date); // 사용자가 선택한 특정 날짜를 담아서 listpage.jsp로 보내준다.
@@ -126,4 +112,4 @@ public class NewsController {
         return "listpage";
     }
 
-}
+}*/

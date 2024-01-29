@@ -595,19 +595,35 @@
 
         }
 
-        .audioControl {
-            display: flex;
-            justify-content: right;
-            align-items: center;
-            margin: 0 padding: 0;
-        }
-
         #playAllButton {
             padding: 0;
             margin: 1%;
         }
 
+        .audioControl{
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            margin: 0
+            padding: 0;
+        }
+
+        #audio{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        #pause{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        .fa-play, .fa-stop{
+            font-size: 1.5rem;
+        }
+
     </style>
+    <script src="https://kit.fontawesome.com/0eba089d9e.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
@@ -801,7 +817,8 @@
         <div class="post-body" id="post-container">
             <!-- post-page 반복출력 -->
             <div class="audioControl">
-                <button id="playAllButton">▶</button>
+                <i id="audio" class="fa-solid fa-play" style="color: #ff1678;"></i>
+                <i id="pause" class="fa-solid fa-stop" style="color: #ff1678;"></i>
             </div>
             <c:forEach var="board" items="${boardList}">
             <div class="post-page">
@@ -829,20 +846,21 @@
                 <p></p>
             </c:forEach>
         </div>
+
         <!-- 페이지네이션을 위한 이전/다음 버튼 -->
         <nav class="posts-pagination">
             <!-- 현재 페이지가 1보다 큰 경우에만 이전 버튼 표시 -->
             <c:if test="${currentPage > 1}">
-                <a href="/listpage?page=${currentPage - 1}" class="loadmore secondary-button">이전</a>
+                <a href="javascript:void(0);" onclick="window.history.back();" class="loadmore secondary-button">이전</a>
             </c:if>
 
             <!-- 다음 페이지 버튼 -->
-            <a href="/listpage?page=${currentPage + 1}" class="loadmore secondary-button">다음</a>
+            <a href="javascript:void(0);" onclick="nextPage();" class="loadmore secondary-button">다음</a>
         </nav>
-    </section>
+
 </div>
 
-<script type="text/javascript">
+<%--<script type="text/javascript">
     $(function(){
         // 음악 파일 주소 배열 초기화
         var audioUrls = [];
@@ -882,8 +900,89 @@
             }
         }
     });
-</script>
+</script>--%>
 
+        <script type="text/javascript">
+
+            $(function(){
+
+                var audio = new Audio();
+                var urlList = []; // TTS 오디오 파일 url 주소 담을 배열
+                let index = 0; // TTS 오디오 파일 index
+
+                // 각 게시물의 카테고리와 URL 정보를 가져와서 음악 파일 주소를 생성하여 배열에 추가
+                <c:forEach var="board" items="${boardList}">
+                // URL에서 마지막 숫자만 추출
+                var url = "${board.url}";
+                var lastIndex = url.lastIndexOf("/") + 1;
+                var filename = url.substring(lastIndex);
+                var category = "${board.category}";
+                var audioUrl = "https://kr.object.ncloudstorage.com/newsya/" + category + "_" + filename + ".mp3";
+
+                // 생성된 주소를 배열에 추가
+                urlList.push(audioUrl);
+
+                // 생성된 음악 파일 경로를 콘솔에 출력
+                console.log("Audio URL for " + category + ": " + audioUrl);
+                </c:forEach>
+
+
+                $("#audio").click(() => {
+                    playAudioSequentially(index, urlList);
+                });
+
+                $("#pause").click(() => {
+                    audio.pause();
+                });
+
+                // 오디오 순차 재생 함수
+                function playAudioSequentially(index, urlList) {
+                    if(index < urlList.length){
+
+                        audio.src = urlList[index];
+
+                        // 오디오 파일 로딩 대기
+                        audio.addEventListener('canplaythrough', () => {
+                            audio.play();
+                        });
+
+                        // 오디오 재생 끝나면
+                        audio.addEventListener('ended', function onEnded() {
+                            index = index + 1;
+                            audio.removeEventListener('ended', onEnded);  // Remove the event listener
+                            playAudioSequentially(index, urlList);
+                        }, { once: true });
+
+                    } else {
+                        index = 0;
+                    }
+                }
+
+                function stopAudio(){
+                    audio.pause();
+                }
+            });
+        </script>
+
+        <script>
+            function nextPage() {
+                var currentPage = parseInt('${currentPage}');
+                var currentUrl = window.location.href;
+
+                var nextPageUrl;
+                if (currentUrl.includes('?')) {
+                    if (currentUrl.includes('page=')) {
+                        nextPageUrl = currentUrl.replace(/page=\d+/, 'page=' + (currentPage + 1));
+                    } else {
+                        nextPageUrl = currentUrl + '&page=' + (currentPage + 1);
+                    }
+                } else {
+                    nextPageUrl = currentUrl + '?page=' + (currentPage + 1);
+                }
+
+                window.location.href = nextPageUrl;
+            }
+        </script>
 
 </body>
 </html>
