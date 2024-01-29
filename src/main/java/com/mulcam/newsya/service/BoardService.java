@@ -11,11 +11,15 @@ public interface BoardService {
 
     List<BoardDto> getNewsByCategory(String category);
 
-    List<BoardDto> getSpecificDateNewsByCategory(String category, Date date);
+    List<BoardDto> getSpecificDateNewsByCategory(String category, Date date, int offset, int limit);
 
-    List<BoardDto> getAllNewsByDate(Date date);
+    List<BoardDto> getAllNewsByDate(Date date, int offset, int limit);
 
-    List<BoardDto> getArticleListStartingFromId(int id);
+    List<BoardDto> getArticleListStartingFromId(int id, int offset, int limit);
 
-    List<BoardDto> getArticleListStartingFromIdAndCategory(int id, String category);
+    List<BoardDto> getArticleListStartingFromIdAndCategory(int id, String category, int offset, int limit);
+
+    List<BoardDto> getLimitedBoards(int offset, int limit);
+
+    List<BoardDto> getLimitedNewsByCategory(String category, int offset, int limit);
 }
