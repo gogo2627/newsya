@@ -5,11 +5,22 @@
 
     <select id="selectMyLikedNews" resultType="com.mulcam.newsya.dto.Article">
         SELECT ATICLE.ID, ATICLE.TITLE, ATICLE.CONTENT, ATICLE.IMG
-        FROM NEWS ATICLE, LIKE1 LL, USER U
+        FROM news ATICLE, NEWSLIKE NL, USER U
         WHERE U.LOGIN_ID = #{loginId}
-        AND ATICLE.ID = LL.NEWS_ID
-        AND LL.USER_ID = U.LOGIN_ID
-        AND LL.NEWS_LIKE_YN=1
+        AND ATICLE.ID = NL.NEWS_ID
+        AND NL.LOGIN_ID = U.LOGIN_ID
+        AND NL.NEWS_LIKE_YN='Y'
+        ORDER BY NL.CREATED_AT DESC;
+
+
     </select>
+
+    <update id="setLikedNews" parameterType="com.mulcam.newsya.dto.NewsLikeDto">
+        INSERT INTO NEWSLIKE
+        (LOGIN_ID, NEWS_ID, NEWS_LIKE_YN, CREATED_AT)
+        values(#{loginId}, #{newsId}, 'Y', now())
+        ON DUPLICATE KEY UPDATE
+        CREATED_AT = now()
+    </update>
 
 </mapper>

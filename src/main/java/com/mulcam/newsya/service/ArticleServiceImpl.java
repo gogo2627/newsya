@@ -1,6 +1,7 @@
 package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.Article;
+import com.mulcam.newsya.dto.NewsLikeDto;
 import com.mulcam.newsya.dto.SearchDto;
 import com.mulcam.newsya.mapper.ArticleMapper;
 import com.mulcam.newsya.mapper.SearchMapper;
@@ -18,7 +19,26 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public List<Article> selectMyLikedNews(String loginId) {
+        articleMapper.createNewsLikeTable();
         return articleMapper.selectMyLikedNews(loginId);
+    }
+
+    @Override
+    public int setLikedNews(NewsLikeDto newsLikeDto) {
+        int res = 0;
+        try{
+            articleMapper.createNewsLikeTable();
+            if(articleMapper.setLikedNews(newsLikeDto) > 0){
+                // 데이터가 없으면 insert 1 반환, 데이터가 있으면 created_at 업데이트 2 반환
+                res = 1;
+            }else{
+                System.out.println("[NewsLike Insert Error]");
+            }
+        }catch(Exception e){
+            System.out.println("[NewsLike Insert Error]");
+            e.printStackTrace();
+        }
+        return res;
     }
 
     @Override

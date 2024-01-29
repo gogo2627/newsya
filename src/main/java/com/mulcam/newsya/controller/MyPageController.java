@@ -25,6 +25,9 @@ public class MyPageController {
     @RequestMapping("/goEditProfile")
     public String goEditProfile(HttpSession session, Model model) {
         String loginId = (String)session.getAttribute("id");
+        if(loginId == null || loginId.trim().isEmpty()) {
+            return "login";
+        }
         UserDto user = userService.findBy(loginId);
 
         model.addAttribute("user", user);
@@ -33,13 +36,15 @@ public class MyPageController {
 
     @RequestMapping("/goLikedArticle")
     public String LikedArticle(@RequestParam(value = "pageNum", required = false) int pageNum, HttpSession session, Model model) {
-        //int pageNum = Integer.parseInt(pageNumStr);
         String loginId = (String)session.getAttribute("id");
 
+        if(loginId == null || loginId.trim().isEmpty()) {
+            return "login";
+        }
         List<Article> newsList = articleService.selectMyLikedNews(loginId);
 
         //	테스트용 더미데이터 세팅 - 운영 시에는 주석 처리
-        newsList = articleService.setDummyData(newsList, 101);
+//        newsList = articleService.setDummyData(newsList, 101);
 
         // 페이징
         PagingUtil paging = new PagingUtil();

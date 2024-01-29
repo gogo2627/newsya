@@ -18,12 +18,41 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void update(UserDto user) {
-        userMapper.updateUser(user);
+    public int update(UserDto user) {
+        int res = 0;
+        try{
+            if(userMapper.updateUser(user) == 1){
+                res = 1;
+            }else{
+                System.out.println("[User update Error]");
+            }
+
+        }catch(Exception e){
+            System.out.println("[User update Error]");
+            e.printStackTrace();
+        }
+        return res;
     }
 
     @Override
-    public void delete(String loginId) {
-        userMapper.deleteUser(loginId);
+    public int delete(String loginId) {
+        int res = 0;
+        try{
+            if(userMapper.deleteUser(loginId) == 1){
+                if(userMapper.deleteCategory(loginId) == 1){
+                    userMapper.deleteNewsLike(loginId);
+                    res = 1;
+                }else{
+                    System.out.println("[Category Delete Error]");
+                }
+            }else{
+                System.out.println("[User Delete Error]");
+            }
+
+        }catch(Exception e){
+            System.out.println("[User Delete Error]");
+            e.printStackTrace();
+        }
+        return res;
     }
 }

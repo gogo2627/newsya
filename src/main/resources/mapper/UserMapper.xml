@@ -13,13 +13,12 @@
             PHONE_NUMBER    AS phone,
             CREATED_AT      AS createdAt,
             UPDATED_AT      AS updatedAt
-        FROM user WHERE LOGIN_ID = #{id}
+        FROM USER WHERE LOGIN_ID = #{id}
     </select>
     
     <update id="updateUser" parameterType="com.mulcam.newsya.dto.UserDto">
-        UPDATE user
-           SET NAME = #{name},
-               PASSWORD = #{password},
+        UPDATE USER
+           SET PASSWORD = #{password},
                EMAIL = #{email},
         PHONE_NUMBER = #{phone},
                UPDATED_AT = NOW()
@@ -28,7 +27,16 @@
     </update>
 
     <delete id="deleteUser" parameterType="com.mulcam.newsya.dto.UserDto">
-        DELETE FROM user WHERE LOGIN_ID = #{id}
+        DELETE FROM USER WHERE LOGIN_ID = #{id}
+
+    </delete>
+
+    <delete id="deleteCategory" parameterType="com.mulcam.newsya.dto.UserDto">
+        DELETE FROM CATEGORY WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteNewsLike" parameterType="com.mulcam.newsya.dto.UserDto">
+        DELETE FROM NEWSLIKE WHERE LOGIN_ID = #{id}
     </delete>
 
 </mapper>

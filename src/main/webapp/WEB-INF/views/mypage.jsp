@@ -24,9 +24,21 @@
         }
 
         body {
+            font-family: 'JalnanGothic';
             background-color: #fff6f6;
             letter-spacing: -.0125rem;
             margin: 0px;
+        }
+
+        @font-face {
+             font-family: 'JalnanGothic';
+             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+             font-weight: normal;
+             font-style: normal;
+        }
+
+        button {
+            font-family: 'JalnanGothic';
         }
 
         .navbar {
@@ -101,7 +113,6 @@
             font-size: 30px;
         }
 
-
     </style>
 </head>
 <body>
@@ -120,10 +131,10 @@
             </a>
 
             <a href="/goLikedArticle?pageNum=1">
-                <button class="pink-button">관심기사목록</button>
+                <button class="pink-button">북마크 기사</button>
             </a>
 
-            <button onclick="withdraw()" class="pink-button">회원탈퇴</button>
+            <button onclick="withdrawConfirm()" class="pink-button">회원탈퇴</button>
         </div>
     </nav>
 </div>
@@ -131,23 +142,66 @@
 </html>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://kit.fontawesome.com/0eba089d9e.js" crossorigin="anonymous"></script>
 <script>
-    function withdraw() {
-        const isOk = confirm("탈퇴를 진행 하시겠습니까?");
-        if (isOk) {
 
-            $.ajax({
+    // 메인 화면으로 이동
+    function moveHome() {
+        location.href = "/";
+    }
+
+    function sAlert(message, icon, buttonText, funcName) {
+        swal({
+            text: message,
+            icon: icon,
+            button: buttonText,
+         }).then(function(){
+            if(funcName != null && funcName != "") {
+                eval(funcName + "()");
+            }
+         });
+    }
+
+    function sConfirm(message, icon, okFuncName, cancelFuncName) {
+        swal({
+          text: message,
+          icon: icon,
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((isConfirm) => {
+          if (isConfirm) {
+            if(okFuncName != null && okFuncName != "") {
+               eval(okFuncName + "()");
+            }
+          } else {
+            if(cancelFuncName != null && cancelFuncName != "") {
+                eval(cancelFuncName + "()");
+            }
+          }
+        });
+    }
+
+    function withdrawConfirm() {
+        sConfirm("탈퇴를 진행 하시겠습니까?", "warning", "withdraw", "");
+    }
+
+    function withdraw() {
+        $.ajax({
                 type: "POST",
                 url: "/Withdraw",
                 contentType: "application/json",
                 success: function (data) {
-                    alert("성공적으로 탈퇴 되었습니다.")
-                    location.href="/";
+                    if(data == "SUCCESS") {
+                        sAlert("성공적으로 탈퇴 되었습니다.", "info", "OK", "moveHome");
+                    }else {
+                        sAlert("탈퇴에 실패 했습니다.", "error", "OK");
+                    }
                 },
                 error: function (error) {
                     alert(error.responseJSON.message)
                 }
             });
-        }
     }
 </script>

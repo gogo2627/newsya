@@ -26,9 +26,17 @@ head {
 }
 
 body {
+    font-family: 'JalnanGothic';
 	background-color: #fff6f6;
 	letter-spacing: -.0125rem;
 	margin: 0px;
+}
+
+@font-face {
+	font-family: 'JalnanGothic';
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
 }
 
 .navbar {
@@ -70,6 +78,9 @@ img {
 	vertical-align: middle;
 	overflow-clip-margin: content-box;
 	overflow: clip;
+	height: 100%;
+    object-fit: cover;
+    max-height: 250px;
 }
 
 a {
@@ -87,6 +98,11 @@ a {
 }
 
 /* article */
+
+article {
+	height: 500px;
+}
+
 .quickMenu {
 	float: left;
 	margin-top: 120px;
@@ -103,6 +119,27 @@ article img {
 	margin-left: 60px;
 	margin-bottom: 60px;
 	list-style-type: none;
+}
+
+.ellipsis {
+    font-size: 1.20rem;
+    word-wrap: 2;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+h3.ellipsis {
+    -webkit-line-clamp: 2;
+}
+
+p.ellipsis {
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+    font-weight: 600;
+    -webkit-line-clamp: 5;
 }
 /* article */
 
@@ -173,22 +210,8 @@ article img {
 					<li class="report">
 						<article>
 							<img src="${myLikedNewsList.img}" alt="">
-							<c:choose>
-                                <c:when test="${fn:length(myLikedNewsList.title) > 47}">
-                                    <h3>${fn:substring(myLikedNewsList.title,0,47)} ...</h3>
-                                </c:when>
-                            	<c:otherwise>
-                            		<h3>${myLikedNewsList.title}</h3>
-                            	</c:otherwise>
-                            </c:choose>
-                            <c:choose>
-                            	<c:when test="${fn:length(myLikedNewsList.content) > 320}">
-                                    <p>${fn:substring(myLikedNewsList.content,0,340)} ...</p>
-                                </c:when>
-                                <c:otherwise>
-                                    <p>${myLikedNewsList.content}</p>
-                                 </c:otherwise>
-                            </c:choose>
+							<h3 class="ellipsis">${myLikedNewsList.title}</h3>
+                            <p class="ellipsis">${myLikedNewsList.content}</p>
 						</article>
 					</li>
 				</c:forEach>

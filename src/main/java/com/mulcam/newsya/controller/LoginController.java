@@ -55,8 +55,9 @@ public class LoginController {
 
     @RequestMapping("/goMyPage")
     public String goMyPage(){
-        return "mypage"; // 소희님이 작성한 페이지명으로 변경
+        return "mypage"; 
     }
+
 
     @PostMapping("/login")
     @Transactional(rollbackFor = {Exception.class})

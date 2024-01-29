@@ -5,8 +5,8 @@ import com.mulcam.newsya.dto.UserDto;
 public interface UserService {
     public UserDto findBy(String loginId);
 
-    public void update(UserDto user);
+    public int update(UserDto user);
 
-    public void delete(String loginId);
+    public int delete(String loginId);
 
 }

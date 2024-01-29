@@ -677,6 +677,17 @@
             }
 
         });
+    function sAlert(message, icon, buttonText, funcName) {
+            swal({
+                text: message,
+                icon: icon,
+                button: buttonText,
+             }).then(function(){
+                if(funcName != null && funcName != "") {
+                    eval(funcName + "()");
+                }
+             });
+        }
     </script>
     <script>
         $(document).ready(function() {
@@ -687,7 +698,11 @@
                     type: "POST",
                     data: { newsId: newsId },
                     success: function(response) {
-                        alert(response); // 좋아요 상태 변경 결과를 알림
+                        if(response == "SUCCESS") {
+                            sAlert("관심기사목록에 추가 되었습니다.", "info", "OK");
+                        }else {
+                            sAlert("좋아요 실패", "error", "OK");
+                        }
                     }
                 });
             });

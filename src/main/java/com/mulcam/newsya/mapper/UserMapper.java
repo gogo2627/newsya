@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
     UserDto selectUser(String loginId);
 
-    void updateUser(UserDto user);
+    int updateUser(UserDto user);
+    int deleteUser(String loginId);
+    int deleteCategory(String loginId);
+    int deleteNewsLike(String loginId);
 
-    void deleteUser(String loginId);
 }

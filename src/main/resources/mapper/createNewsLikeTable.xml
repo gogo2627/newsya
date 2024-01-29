@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mulcam.newsya.mapper.ArticleMapper">
+    <update id="createNewsLikeTable">
+        CREATE TABLE IF NOT EXISTS NEWSLIKE (
+            LOGIN_ID VARCHAR(45) NOT NULL,
+            NEWS_ID INT(11) NOT NULL,
+            NEWS_LIKE_YN VARCHAR(1),
+            COMMENT_ID INT(11),
+            COMMENT_LIKE_YN VARCHAR(1),
+            CREATED_AT DATETIME,
+            PRIMARY KEY (LOGIN_ID, NEWS_ID)
+
+        );
+    </update>
+</mapper>
+
+        <!--
+        https://velog.io/@yeoonnii/20220914-Oracle
+        https://123okk2.tistory.com/456
+        https://github.com/madplay/madplay.github.io/issues/131
+        -->
