@@ -19,7 +19,6 @@
     <update id="updateUser" parameterType="com.mulcam.newsya.dto.UserDto">
         UPDATE USER
            SET PASSWORD = #{password},
-               EMAIL = #{email},
         PHONE_NUMBER = #{phone},
                UPDATED_AT = NOW()
         WHERE LOGIN_ID = #{id}

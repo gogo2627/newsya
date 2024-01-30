@@ -706,6 +706,9 @@
 
             $(document).ready(function() {
                 $(".like-button").click(function() {
+                    if(!"${sessionScope.id}".length > 0){
+                        window.location.href="/goLogin";
+                    }
                     var newsId = $(this).data("news-id");
                     $.ajax({
                         url: "/toggleLike",
@@ -713,7 +716,7 @@
                         data: { newsId: newsId },
                         success: function(response) {
                             if(response == "SUCCESS") {
-                                sAlert("관심기사목록에 추가 되었습니다.", "info", "OK");
+                                sAlert("북마크에 추가 되었습니다.", "info", "OK");
                             }else {
                                 sAlert("좋아요 실패", "error", "OK");
                             }

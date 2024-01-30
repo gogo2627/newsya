@@ -193,7 +193,7 @@ p.ellipsis {
 					src="resources/image/NewsYaLogo.png" alt="로고">
 				</a>
 			</div>
-			<h1 id="title">북마크 기사</h1>
+			<h1 id="title">북마크</h1>
 		</nav>
 	</div>
 	<c:choose>

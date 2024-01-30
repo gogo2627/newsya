@@ -50,11 +50,12 @@ public class UserController {
             return "MISSMATCHEDPWD";
         }else {
             user.setId(loginId);
-            user.setEmail(param.getEmail());
+//            user.setEmail(param.getEmail());
             user.setPhone(param.getPhoneNumber());
             user.setPassword(pwEncoder.encode(param.getNewPassword()));
 
             if (userService.update(user) == 1) {
+                session.invalidate();
                 return "SUCCESS";
             } else {
                 return "FAIL";

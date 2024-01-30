@@ -140,6 +140,7 @@
             width: 50px;
             height: 30px;
             margin-right: 10px;
+            border-radius: 10px;
         }
         .auth{
             display: none;
@@ -154,6 +155,9 @@
             display: inline-block;
             width: 60px;
             height: 35px;
+            margin-bottom: 15px;
+            margin-left: 5px;
+            border-radius: 10px;
         }
 
         .time{
@@ -215,7 +219,7 @@
                 <img id="logo" src="resources/image/NewsYaLogo.png" alt="로고">
             </a>
         </div>
-        <h1 id="title">회원정보수정</h1>
+        <h1 id="title">비밀번호 변경</h1>
 <!--
             <div class="form-group">
                 <label for="loginId">아이디:</label>
@@ -234,7 +238,7 @@
 
             <div class="form-group">
                 <label for="new_password">새 비밀번호:</label>
-                <input type="password" id="new_password" name="password">
+                <input type="password" id="new_password" name="password" placeholder="영문, 숫자, 기호 포함 8-20자">
             </div>
 
             <div class="form-group">
@@ -257,7 +261,7 @@
             <div class="finding-pw-tel">
                 <label for="phoneNumber">전화번호:</label>
                 <input type="tel" name="phone" id="phone" class="finding-input" maxlength="11" value="${user.phone}" placeholder="전화번호(01012345678)">
-                <button class="tel-auth">인증</button>
+                <button class="tel-auth fontBtn">인증</button>
             </div>
             <div class="auth">
                 <div id="verification_Code">
@@ -266,14 +270,16 @@
                 <div class="time">
                     <p id="timer">3 : 00</p>
                 </div>
-                <button class="auth-check">확인</button>
-                <button class="auth-resend">재전송</button>
+                <div class="button-container">
+                <button class="auth-check fontBtn">확인</button>
+                <button class="auth-resend fontBtn">재전송</button>
+                </div>
             </div>
         </div>
-            <div class="form-group">
-                <label for="email">이메일:</label>
-                <input type="text" id="email" name="email" value="${user.email}">
-            </div>
+<%--            <div class="form-group">--%>
+<%--                <label for="email">이메일:</label>--%>
+<%--                <input type="text" id="email" name="email" value="${user.email}">--%>
+<%--            </div>--%>
 
             <div class="button-container">
                 <input type="button" value="취소" onclick="moveHome()" class="btn-style fontBtn">
@@ -369,7 +375,7 @@
             // 확인 버튼 있으면 남기고, 없어졌으면 다시 생기게 하기
             if($(".auth-check").css("display") == "none"){
                 $(".auth-check").show();
-				$(".auth").css("margin-right","300px");
+				$(".auth").css("margin-right","350px");
                 //ㄴ>재전송 누른 후
             }
 
@@ -714,7 +720,7 @@ function sAlert(message, icon, buttonText, funcName) {
         const newPassword = $("#new_password").val();
         const newPasswordConfirm = $("#new_password_confirm").val();
         const phoneNumber = $("#phone").val();
-        const email = $("#email").val();
+        // const email = $("#email").val();
 
         if( ! validationCheck(password,newPassword,newPasswordConfirm,phoneNumber) ) {
             return false;
@@ -729,7 +735,7 @@ function sAlert(message, icon, buttonText, funcName) {
                 newPassword : newPassword,
                 newPasswordConfirm : newPasswordConfirm,
                 phoneNumber : phoneNumber,
-                email : email,
+                // email : email,
             }),
             success: function (data) {
                 if(data=="MISSMATCHEDPWD") {
@@ -737,7 +743,7 @@ function sAlert(message, icon, buttonText, funcName) {
                 }else if(data=="FAIL") {
                     sAlert("정보 수정에 실패 헀습니다.", "error", "OK");
                 }else if(data=="SUCCESS") {
-                     sAlert("성공적으로 저장 했습니다.", "info", "홈으로 가기", "moveHome");
+                     sAlert("성공적으로 저장 했습니다. 다시 로그인해주세요.", "info", "홈으로 가기", "moveHome");
                 }
             },
             error: function (error) {

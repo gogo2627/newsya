@@ -127,11 +127,11 @@
         <h1 id="title">마이페이지</h1>
         <div class="button-group">
             <a href="/goEditProfile">
-                <button class="pink-button">회원정보 수정</button>
+                <button class="pink-button">비밀번호 변경</button>
             </a>
 
             <a href="/goLikedArticle?pageNum=1">
-                <button class="pink-button">북마크 기사</button>
+                <button class="pink-button">북마크</button>
             </a>
 
             <button onclick="withdrawConfirm()" class="pink-button">회원탈퇴</button>
