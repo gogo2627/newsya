@@ -599,7 +599,7 @@ pageEncoding="UTF-8"%>
                     </div>
                 </div>
                 <div class="pw-change">
-                     <input type="password" name="password" id="newpw" class="finding-input" maxlength="20" placeholder="새 비밀번호 입력">
+                     <input type="password" name="password" id="newpw" class="finding-input" maxlength="20" placeholder="비밀번호(영문,숫자,기호 포함 8-20자)">
                      <div class="true"><i class="fa-solid fa-check" id="check-mark" style="color: #45ca21;"></i></div>
                      <div class="false"><i class="fa-regular fa-circle-xmark" id="x-mark" style="color: #f60404;"></i></div>
                  </div>

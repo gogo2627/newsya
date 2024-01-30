@@ -50,11 +50,17 @@ public class HomeController {
     }
 
     @RequestMapping("/searchKeyWord")
-    public String search(Model model, SearchDto sdto) {
+    public String search(@RequestParam(value = "page", defaultValue = "1") int page, Model model, SearchDto sdto) {
+        int pageSize = 4; // 페이지당 보여줄 게시물 수
+        int offset = (page - 1) * pageSize; // 오프셋 계산
+
         // 검색 결과가 있을 때만 검색 결과를 가져와 모델에 추가
         if (StringUtils.hasText(sdto.getKeyWord())) {
-            List<SearchDto> searchResults = ss.searchKeyWord(sdto.getKeyWord()); // 검색 결과 가져오기
+            List<SearchDto> searchResults = ss.searchKeyWord(sdto.getKeyWord(), offset, pageSize); // 검색 결과 가져오기
             model.addAttribute("boardList", searchResults); // 검색 결과를 모델에 추가
+
+            // 현재 페이지 번호 전달
+            model.addAttribute("currentPage", page);
         }
 
         return "listpage"; // listpage.jsp로 이동

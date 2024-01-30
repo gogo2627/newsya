@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface SearchService {
 
-    public List<SearchDto> searchKeyWord(String keyWord);
+    public List<SearchDto> searchKeyWord(String keyWord, int offset, int limit);
 
     public List<SearchDto> getEconomyArticle();
 

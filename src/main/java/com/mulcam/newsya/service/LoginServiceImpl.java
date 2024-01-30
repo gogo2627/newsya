@@ -4,6 +4,7 @@ import com.mulcam.newsya.dto.LoginDto;
 import com.mulcam.newsya.mapper.LoginMapper;
 import com.mulcam.newsya.mapper.RegisterMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private RegisterMapper rm;
+
+    @Autowired
+    private PasswordEncoder pwEncoder;
 
     @Override
     public String login(LoginDto dto){
@@ -46,6 +50,7 @@ public class LoginServiceImpl implements LoginService {
 
         try{
             rm.createUserTable();
+            ldto.setPassword(pwEncoder.encode(ldto.getPassword()));
             res = lm.changePw(ldto);
         }catch(Exception e){
             System.out.println("[PassWord Update Error]");

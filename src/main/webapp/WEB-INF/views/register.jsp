@@ -475,7 +475,7 @@ pageEncoding="UTF-8"%>
             }
 
             // 비밀번호 형식 체크 (정규식 이용)
-            // 영문자(대문자 또는 소문자), 숫자, 특수문자가 들어간 8 - 20자 비밀번호
+            // 영문자, 숫자, 특수문자를 포함한 8 - 20자 비밀번호
             function pwChk(pw){
 
                 let pwChkRes = 0;
@@ -581,7 +581,7 @@ pageEncoding="UTF-8"%>
                     <button class="id-duplicate-chk">중복<br>확인</button>
                 </div>
                 <div class="pw-input-tab">
-                    <input type="password" name="password" id="pw" class="finding-input" maxlength="20" placeholder="비밀번호">
+                    <input type="password" name="password" id="pw" class="finding-input" maxlength="20" placeholder="비밀번호(영문,숫자,기호 포함 8-20자)">
                 </div>
                 <div class="pw-chk-tab">
                     <input type="password" name="passwordChk" id="pw-chk" class="finding-input" maxlength="20" placeholder="비밀번호 확인">

@@ -22,7 +22,8 @@ public class SearchServiceImpl implements SearchService{
     InterestDto idto;
 
     @Override
-    public List<SearchDto> searchKeyWord(String keyWord) { return sm.searchKeyWord(keyWord); }
+    public List<SearchDto> searchKeyWord(String keyWord, int offset, int limit) {
+        return sm.searchKeyWord(keyWord, offset, limit); }
 
     @Override
     public List<SearchDto> getEconomyArticle() {
