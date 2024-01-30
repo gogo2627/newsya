@@ -1,8 +1,15 @@
 package com.mulcam.newsya.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Getter
+@Setter
 public class BoardDto {
     private int id;
     private String category;
