@@ -20,11 +20,11 @@ public interface SearchService {
 
     public List<SearchDto> getPoliticsArticle();
 
-    public List<SearchDto> getMainArticle(String id);
+    public List<String> getUrlFromArticle();
 
-    public List<InterestDto> getInterest(String id);
+    //public List<InterestDto> getInterest(String id);
 
-    public String updateInterest(InterestDto idto);
+    //public String updateInterest(InterestDto idto);
 
 
 }

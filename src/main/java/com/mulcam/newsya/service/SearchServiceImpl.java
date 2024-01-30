@@ -45,10 +45,11 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<SearchDto> getMainArticle(String id) {
-        return sm.getMainArticle(id);
+    public List<String> getUrlFromArticle() {
+        return sm.getUrlFromArticle();
     }
 
+    /*
     @Override
     public List<InterestDto> getInterest(String id) {
         sm.createCategoryTable();
@@ -80,5 +81,5 @@ public class SearchServiceImpl implements SearchService{
 
         return res;
     }
-
+    */
 }

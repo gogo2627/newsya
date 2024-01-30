@@ -54,7 +54,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 0;
-            padding: 3rem 5% 2.5rem 5%;
+            padding: 3rem 5%;
         }
 
         .navbar-menu{
@@ -92,7 +92,7 @@
         .navbar-user-info > button{
             border: none;
             text-align: center;
-            margin: 0 0 0 5px;
+            margin: 10px 0 10px 5px;
             padding: 3px 5px;
             border-radius: 10px;
             background-color: #ff1678;
@@ -102,17 +102,6 @@
             font-size: 1rem;
             font-weight: 500px;
             text-align: right;
-        }
-
-        @media screen and (max-width: 750px){ /* 화면크기가 750px 이하면 로그인했을때 로그인 정보 숨긴다. */
-            /* (기본적으로 화면 조건 설정할 때, 화면 크기는 margin까지 포함한 크기이다.) */
-            .navbar-user-info{
-                display: none;
-            }
-
-            #bullhorn{
-                display:none;
-            }
         }
 
         .intro-head{
@@ -254,22 +243,6 @@
             cursor: pointer;
         }
 
-
-        .category-link-active{
-            border-bottom: 3px solid black;
-        }
-
-        .category-link-active, .category-link{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 1rem;
-            padding: 1.25rem 0px;
-            font-size: 1.125rem;
-            color: black;
-            cursor: pointer;
-        }
-
         a, abbr{
             text-decoration: none;
         }
@@ -282,10 +255,9 @@
             position: relative;
         }
 
-        .news-category > h2{
+        .news-category > h1{
             display: inline-block;
             vertical-align: middle;
-            margin-right: 15px;
             text-align: center;
         }
 
@@ -444,7 +416,7 @@
         h1, h2, h3{
             font-weight: 700px;
             color: black;
-            line-height: 1.4;
+            line-height: 2;
             word-break: keep-all; /* 텍스트가 자신의 콘텐츠 박스 밖으로 오버플로 할 때 줄을 바꿀 지 지정 */
             /* https://developer.mozilla.org/ko/docs/Web/CSS/word-break */
         }
@@ -458,16 +430,22 @@
         }
 
         h1, p{
-            margin: 0;
+            margin: 10px;
         }
 
         .navbar-user-info{
-            display: none }
+            display: none
+        }
 
         /*위에는 승주님이 적으신 css*/
         button:not(:active), button:not(:focus) {
             outline: 0;
         }
+
+        .category-title{
+            margin-bottom: 3px;
+        }
+
         .secondary-button {
             display: inline-block;
             min-width: 104px;
@@ -484,17 +462,19 @@
             background: #fff;
             color: #051619;
         }
+
         button {
             padding: 0;
             border: none;
             background: none;
             cursor: pointer;
-            /*font: inherit;*/
             position: relative;
         }
+
         .secondary-button:focus:not(:disabled), .secondary-button:hover:not(:disabled) {
             background: #ff1678;
         }
+
         .loadmore {
             display: block;
             margin: 0 auto;
@@ -615,7 +595,35 @@
 
         }
 
+        #playAllButton {
+            padding: 0;
+            margin: 1%;
+        }
+
+        .audioControl{
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            margin: 0
+            padding: 0;
+        }
+
+        #audio{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        #pause{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        .fa-play, .fa-stop{
+            font-size: 1.5rem;
+        }
+
     </style>
+    <script src="https://kit.fontawesome.com/0eba089d9e.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
@@ -629,6 +637,29 @@
                     button: "OK",
                 });
             }
+
+            if("${categoryLabel}" != null && "${categoryLabel}" != ""){
+                // 사용자가 선택한 특정 날짜가 있다면 그 날짜를, 아니면 오늘 날짜를 보여준다.
+                if("${date}" != null && "${date}" != ""){
+                    // 날짜 선택 칸을 특정 날짜로 세팅.
+                    $("#select-date").val("${date}");
+                }else{
+                    // 날짜 선택 칸 오늘 날짜로 세팅.
+                    const today = new Date().toISOString().substring(0,10);
+                    $("#select-date").val(today);
+                }
+            }else{
+                $(".news-date").hide();
+            }
+
+
+
+            // 각 분야 목록 페이지에 어떤 목록인지 이모티콘과 함께 표시.
+            $(".category-title").html(getCategoryLabel("${categoryLabel}"));
+
+            // 오늘 이후 날짜 선택 막기.
+            const maxDay = new Date((Date.now())-(new Date().getTimezoneOffset()*60000)).toISOString().split("T")[0];
+            $("#select-date").prop("max", maxDay);
 
             // 로그인 상태
             if("${sessionScope.id}".length > 0){
@@ -654,10 +685,28 @@
                 location.href="/goMyPage";
             });
 
+            $("#select-date").change(() => {
+                location.href="/category/${category}/date=" + $("#select-date").val();
+            });
+
+            $(".like-button").click(function() {
+                var newsId = $(this).data("news-id");
+                $.ajax({
+                    url: "/toggleLike",
+                    type: "POST",
+                    data: { newsId: newsId },
+                    success: function(response) {
+                        alert(response); // 좋아요 상태 변경 결과를 알림 // sweetalert api 사용하는 코드로 수정해주세요.
+                    },
+                    error:function(){
+                        swal("통신 에러", "다시 시도해주세요.", "info");
+                    }
+                });
+            });
+
             function Ajax(url, tmp){
 
                 let res;
-
 
                 $.ajax({
                     url: url,
@@ -669,13 +718,14 @@
                         res = meg.res;
                     },
                     error: function(){
-
+                        swal("통신 에러", "다시 시도해주세요.", "info");
                     }
                 });
 
                 return res;
             }
 
+<<<<<<< HEAD
         });
     function sAlert(message, icon, buttonText, funcName) {
             swal({
@@ -706,45 +756,111 @@
                     }
                 });
             });
+=======
+            function getCategoryLabel(category) {
+                switch (category) {
+                    case "politics":
+                        return "⚖\uFE0F 정치";
+                        break;
+                    case "economic":
+                        return "\uD83D\uDCB0 경제";
+                        break;
+                    case "society":
+                        return "\uD83E\uDD1D 사회";
+                        break;
+                    case "foreign":
+                        return "&#127757 세계";
+                        break;
+                    case "all":
+                        return "&#127756 전체";
+                        break;
+                    default:
+                        return "🔍️ 검색 결과";
+                        break;
+                }
+            }
+
+>>>>>>> 10eb3bf2d61d4e809caddcfd711f618649d23d58
         });
     </script>
 </head>
 <body>
-<nav class="navbar" role="navigation">
-    <div class="navbar-inner">
-        <div class="navbar-menu" role="navigation"></div>
-        <a class="navbar-logo" href="/">
-            <img id="logo" src="${pageContext.request.contextPath}/resources/image/NewsYaLogo.png">
-        </a>
-        <div class="navbar-user">
-            <a class="navbar-user-login" href="/goLogin">
-                <img id="login" src="${pageContext.request.contextPath}/resources/image/Login.png">
+
+
+    <nav class="navbar" role="navigation">
+        <div class="navbar-inner">
+            <div class="navbar-menu" role="navigation"></div>
+            <a class="navbar-logo" href="/">
+                <img id="logo" src="${pageContext.request.contextPath}/resources/image/NewsYaLogo.png">
             </a>
-            <div class="navbar-user-info">
-                <p id="user-name">${sessionScope.id}님</p>
-                <button id="logout">로그아웃</button>
-                <button id="mypage">마이페이지</button>
+            <div class="navbar-user">
+                <a class="navbar-user-login" href="/goLogin">
+                    <img id="login" src="${pageContext.request.contextPath}/resources/image/Login.png">
+                </a>
+                <div class="navbar-user-info">
+                    <p id="user-name">${sessionScope.id}님</p>
+                    <button id="logout">로그아웃</button>
+                    <button id="mypage">마이페이지</button>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+    <nav class="category" role="navigation">
+        <div class="category-inner">
+            <a class="category-link" href="/category/all">
+                <span role="img">&#127756;</span>
+                전체
+            </a>
+            <a class="category-link" href="/category/politics">
+                <span>
+                    <span role="img">⚖️</span>
+                    정치
+                </span>
+            </a>
+            <a class="category-link" href="/category/economic">
+                <span>
+                    <span role="img">💰</span>
+                    경제
+                </span>
+            </a>
+            <a class="category-link" href="/category/society">
+                <span>
+                    <span role="img">🤝</span>
+                    사회
+                </span>
+            </a>
+            <a class="category-link" href="/category/foreign">
+                <span>
+                    <span role="img">&#127757;</span>
+                    세계
+                </span>
+            </a>
+        </div>
+    </nav>
     <section class="news">
         <div class="news-category">
-            <h2><span role="img" aria-label="" class="emoji">${categoryLabel}</span>  </h2>
-            <%--<span>2024-01-20</span>--%>
-            <button id="play"></button>
+            <h1 class="category-title"></h1>
+            <div class="news-date"><input type="date" id="select-date"></div>
+            <!--
+            https://inpa.tistory.com/entry/JS-%F0%9F%93%9A-%EC%9D%8C%EC%95%85-%EA%B0%9D%EC%B2%B4Audio-%EB%8B%A4%EB%A3%A8%EA%B8%B0
+            https://velog.io/@soob1008/js-Audio-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+            -->
         </div>
-        <div class="post-body">
+
+        <div class="post-body" id="post-container">
             <!-- post-page 반복출력 -->
+            <div class="audioControl">
+                <i id="audio" class="fa-solid fa-play" style="color: #ff1678;"></i>
+                <i id="pause" class="fa-solid fa-stop" style="color: #ff1678;"></i>
+            </div>
             <c:forEach var="board" items="${boardList}">
             <div class="post-page">
                 <span ><fmt:formatDate value="${board.date}" pattern="yyyy-MM-dd" /></span>
                 <h2>${board.title}</h2>
                 <div class="post-image">
                     <img src="${board.img}" alt="" loading="lazy">
-
                 </div>
-                <div style="margin-bottom: 20px;"><span><%--[사진-뉴윅]--%></span></div>
+                <div style="margin-bottom: 20px;"></div>
                 <div class="card-body">
                     <span>${board.content}</span>
                 </div>
@@ -763,11 +879,143 @@
                 <p></p>
             </c:forEach>
         </div>
-        <nav class="posts-pagination">
-            <button type="button" class="loadmore secondary-button">더보기</button>
 
+        <!-- 페이지네이션을 위한 이전/다음 버튼 -->
+        <nav class="posts-pagination">
+            <!-- 현재 페이지가 1보다 큰 경우에만 이전 버튼 표시 -->
+            <c:if test="${currentPage > 1}">
+                <a href="javascript:void(0);" onclick="window.history.back();" class="loadmore secondary-button">이전</a>
+            </c:if>
+
+            <!-- 다음 페이지 버튼 -->
+            <a href="javascript:void(0);" onclick="nextPage();" class="loadmore secondary-button">다음</a>
         </nav>
-    </section>
+
 </div>
+
+<%--<script type="text/javascript">
+    $(function(){
+        // 음악 파일 주소 배열 초기화
+        var audioUrls = [];
+
+        // 각 게시물의 카테고리와 URL 정보를 가져와서 음악 파일 주소를 생성하여 배열에 추가
+        <c:forEach var="board" items="${boardList}">
+        // URL에서 마지막 숫자만 추출
+        var url = "${board.url}";
+        var lastIndex = url.lastIndexOf("/") + 1;
+        var filename = url.substring(lastIndex);
+        var category = "${board.category}";
+        var audioUrl = "https://kr.object.ncloudstorage.com/newsya/" + category + "_" + filename + ".mp3";
+
+        // 생성된 주소를 배열에 추가
+        audioUrls.push(audioUrl);
+
+        // 생성된 음악 파일 경로를 콘솔에 출력
+        console.log("Audio URL for " + category + ": " + audioUrl);
+        </c:forEach>
+
+        // 모든 음악 파일을 재생하는 버튼 클릭 시
+        $("#playAllButton").click(function() {
+            // 첫 번째 음악부터 순차적으로 재생 시작
+            playAudioSequentially(0);
+        });
+
+        // 오디오 순차 재생 함수
+        function playAudioSequentially(index) {
+            if(index < audioUrls.length) {
+                var audio = new Audio(audioUrls[index]);
+                audio.addEventListener('ended', function(){
+                    console.log("재생 횟수 : " + index);
+                    // 다음 음악 파일 재생을 위해 인덱스 증가 후 재귀 호출
+                    playAudioSequentially(index + 1);
+                });
+                audio.play();
+            }
+        }
+    });
+</script>--%>
+
+        <script type="text/javascript">
+
+            $(function(){
+
+                var audio = new Audio();
+                var urlList = []; // TTS 오디오 파일 url 주소 담을 배열
+                let index = 0; // TTS 오디오 파일 index
+
+                // 각 게시물의 카테고리와 URL 정보를 가져와서 음악 파일 주소를 생성하여 배열에 추가
+                <c:forEach var="board" items="${boardList}">
+                // URL에서 마지막 숫자만 추출
+                var url = "${board.url}";
+                var lastIndex = url.lastIndexOf("/") + 1;
+                var filename = url.substring(lastIndex);
+                var category = "${board.category}";
+                var audioUrl = "https://kr.object.ncloudstorage.com/newsya/" + category + "_" + filename + ".mp3";
+
+                // 생성된 주소를 배열에 추가
+                urlList.push(audioUrl);
+
+                // 생성된 음악 파일 경로를 콘솔에 출력
+                console.log("Audio URL for " + category + ": " + audioUrl);
+                </c:forEach>
+
+
+                $("#audio").click(() => {
+                    playAudioSequentially(index, urlList);
+                });
+
+                $("#pause").click(() => {
+                    audio.pause();
+                });
+
+                // 오디오 순차 재생 함수
+                function playAudioSequentially(index, urlList) {
+                    if(index < urlList.length){
+
+                        audio.src = urlList[index];
+
+                        // 오디오 파일 로딩 대기
+                        audio.addEventListener('canplaythrough', () => {
+                            audio.play();
+                        });
+
+                        // 오디오 재생 끝나면
+                        audio.addEventListener('ended', function onEnded() {
+                            index = index + 1;
+                            audio.removeEventListener('ended', onEnded);  // Remove the event listener
+                            playAudioSequentially(index, urlList);
+                        }, { once: true });
+
+                    } else {
+                        index = 0;
+                    }
+                }
+
+                function stopAudio(){
+                    audio.pause();
+                }
+            });
+        </script>
+
+        <script>
+            function nextPage() {
+                var currentPage = parseInt('${currentPage}');
+                var currentUrl = window.location.href;
+
+                var nextPageUrl;
+                if (currentUrl.includes('?')) {
+                    if (currentUrl.includes('page=')) {
+                        nextPageUrl = currentUrl.replace(/page=\d+/, 'page=' + (currentPage + 1));
+                    } else {
+                        nextPageUrl = currentUrl + '&page=' + (currentPage + 1);
+                    }
+                } else {
+                    nextPageUrl = currentUrl + '?page=' + (currentPage + 1);
+                }
+
+                window.location.href = nextPageUrl;
+            }
+        </script>
+
 </body>
 </html>

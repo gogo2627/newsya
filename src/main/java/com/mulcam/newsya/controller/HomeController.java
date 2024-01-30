@@ -38,11 +38,13 @@ public class HomeController {
         List<SearchDto> flist = ss.getForeignArticle();
         List<SearchDto> slist = ss.getSocialArticle();
         List<SearchDto> plist = ss.getPoliticsArticle();
+        List<String> ulist = ss.getUrlFromArticle();
 
         model.addAttribute("elist", elist);
         model.addAttribute("flist", flist);
         model.addAttribute("slist", slist);
         model.addAttribute("plist", plist);
+        model.addAttribute("ulist", ulist);
 
         return "mainpage";
     }
@@ -58,15 +60,7 @@ public class HomeController {
         return "listpage"; // listpage.jsp로 이동
     }
 
-    @RequestMapping("/article/{id}")
-    public String newsClickFromMain(@PathVariable("id")String id, Model model){
-
-        List<SearchDto> article = ss.getMainArticle(id);
-
-        model.addAttribute("article", article);
-        return "한빈님 기사 요약 페이지명";
-    }
-
+    /*
     @RequestMapping("/getInterest")
     @ResponseBody
     public Map<String, Boolean[]> getInterest(@RequestBody InterestDto idto){
@@ -88,14 +82,11 @@ public class HomeController {
 
         Map<String, String> msg = new HashMap<String, String>();
 
-        System.out.println("아이디 " + idto.getId());
-        System.out.println("분야 " + idto.getIndex());
-
         msg.put("res", ss.updateInterest(idto));
 
         return msg;
     }
-
+    */
 }
 
 // 동적 매핑

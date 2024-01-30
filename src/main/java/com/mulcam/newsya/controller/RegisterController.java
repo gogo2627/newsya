@@ -48,7 +48,6 @@ public class RegisterController {
     @ResponseBody
     public Map<String, Boolean> idDupChk(@RequestBody UserDto udto){
 
-        System.out.println("중복체크");
         System.out.println(udto.getId());
 
         Map<String, Boolean> msg = new HashMap<String, Boolean>();
@@ -82,9 +81,6 @@ public class RegisterController {
 
         Map<String, Boolean> msg = new HashMap<String, Boolean>();
 
-        System.out.println("입력받은 전화번호 : " + mdto.getTo());
-        System.out.println("입력받은 인증코드 : " + mdto.getInputAuthNum());
-
         if(sms.isVerify(mdto)){
             msg.put("res", true);
         }else{
@@ -111,17 +107,4 @@ public class RegisterController {
 
     }
 
-    /*
-    @RequestMapping("/authResend")
-    public Map<String, Boolean> authResend(MessageDto dto){
-
-        Map<String, Boolean> msg = new HashMap<String, Boolean>();
-
-        sms.sendSmsResponse(mdto.getTo());
-
-        msg.put("res", true);
-
-        return msg;
-    }
-    */
 }

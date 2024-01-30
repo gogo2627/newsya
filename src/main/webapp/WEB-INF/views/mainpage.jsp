@@ -52,7 +52,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 0;
-            padding: 3rem 5% 2.5rem 5%;
+            padding: 3rem 5%;
         }
 
         .navbar-menu{
@@ -152,9 +152,10 @@
         .intro-bullhorn{
             position: absolute;
             left: 50%;
+            transform: translateX(-50%);
             width: 100%;
             max-width: 250px;
-            margin-left: 200px;
+            margin-left: 20%;
         }
 
         #bullhorn{
@@ -174,6 +175,7 @@
             max-width: 560px;
             font-size: 1.5rem;
             color: rgb(255,255,255);
+            font: inherit;
         }
 
         .search-tab{
@@ -189,7 +191,6 @@
             border-radius: 0 10px 10px 0;
             background: white;
             cursor: pointer;
-            font: inherit;
             width: 55.5px;
             height: 55.5px;
             display: flex;
@@ -254,6 +255,28 @@
 
         a, abbr{
             text-decoration: none;
+        }
+
+        .audioControl{
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            margin: 0
+            padding: 0;
+        }
+
+        #audio{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        #pause{
+            padding: 1% 1%;
+            margin: 0;
+        }
+
+        .fa-play, .fa-stop{
+            font-size: 1.5rem;
         }
 
         .news{
@@ -436,12 +459,26 @@
             display: none;
         }
 
+        button{
+            border: none;
+        }
+
     </style>
+    <script src="https://kit.fontawesome.com/0eba089d9e.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
 
         $(function(){
+
+            var audio = new Audio();
+            let urlList = []; // TTS 오디오 파일 url 주소 담을 배열
+            let index = 0; // TTS 오디오 파일 index
+
+            // 배열에 TTS 오디오 파일 주소 적재
+            "${ulist}".replace(/^\[|\]$/g, '').split(',').forEach((element, index) => {
+                urlList.push("https://kr.object.ncloudstorage.com/newsya/" + element.trim() + ".mp3");
+            });
 
              if("${msg}" != null && "${msg}" != "") {
                 swal({
@@ -517,6 +554,14 @@
                 location.href="/goMyPage";
             });
 
+            $("#audio").click(() => {
+                playAudioSequentially(index, urlList);
+            });
+
+            $("#pause").click(() => {
+                audio.pause();
+            });
+
             function Ajax(url, val){
 
                 let res;
@@ -566,8 +611,70 @@
                 console.log("인덱스 함수 결과 : " + res);
                 return res;
             }
+
+            // 오디오 순차 재생 함수
+            function playAudioSequentially(index, urlList) {
+
+                if(index < urlList.length){
+
+                    audio.src = urlList[index];
+
+                    // 오디오 파일 로딩 대기
+                    audio.addEventListener('canplaythrough', () => {
+                        audio.play();
+                    });
+
+                    // 오디오 재생 끝나면
+                    audio.addEventListener('ended', function onEnded() {
+                        index = index + 1;
+                        audio.removeEventListener('ended', onEnded);  // Remove the event listener
+                        playAudioSequentially(index, urlList);
+                    }, { once: true });
+
+                }else{
+                    index = 0;
+                }
+
+            }
+
+            function stopAudio(){
+                audio.pause();
+            }
         });
     </script>
+    <!--
+        문제:
+        playAudioSequentially 함수에서 한번 오디오 파일을 재생할 때마다 'ended' 이벤트에서 찍히는 로그의 개수가 2배씩 늘어나는 문제가 있었다.
+
+        원인과 해결:
+        The issue with the doubling of console log messages is likely due to the fact that the code snippet is inside an event listener that is called multiple times.
+        Every time the ended event is triggered (indicating that an audio file has finished playing),
+        the event listener is invoked, leading to the increase in the number of console log messages.
+
+        In your code:
+
+        audio.addEventListener('ended', function(){
+            console.log("재생 횟수 : " + index);
+            index = index + 1;
+            playAudioSequentially(index, urlList);
+        });
+
+        The ended event listener is calling the playAudioSequentially function recursively.
+        However, each time it does so, it attaches a new instance of the event listener to the ended event.
+        As a result, when the next audio file finishes playing, all the attached event listeners are invoked,
+        causing the console log messages to multiply.
+
+        To address this issue, you can consider removing the event listener before attaching a new one. One way to achieve this is by using the once option when attaching the event listener:
+
+        audio.addEventListener('ended', function onEnded() {
+            console.log("재생 횟수 : " + index);
+            index = index + 1;
+            audio.removeEventListener('ended', onEnded);  // Remove the event listener
+            playAudioSequentially(index, urlList);
+        }, { once: true });
+
+        By using { once: true }, you ensure that the event listener is automatically removed after it has been executed once. This should prevent the doubling of console log messages.
+    -->
 </head>
 <body>
 <div>
@@ -593,9 +700,8 @@
         <h1 class="intro-head-title">
             <div class="intro-inner">
                 시간이 없어?
-                <span class="mobile-block">그럼 핵심만 알려줄게!</span>
+                <span class="mobile-block">그럼 핵심만 들려줄게!</span>
             </div>
-
         </h1>
         <div class="intro-head-banner">
             <div class="intro-bullhorn">
@@ -603,7 +709,7 @@
             </div>
             <div class="intro-inner">
                 <p>하루 하루 바쁘시죠?</p>
-                <p>그런 당신을 위해 우리가 핵심만 알려줄게요.</p>
+                <p>그런 당신을 위해 우리가 핵심만 들려줄게요.</p>
                 <br>
                 <p>바쁜 당신을 위한 뉴스 요약 서비스</p>
                 <div class="search-tab">
@@ -621,7 +727,11 @@
     </header>
     <nav class="category" role="navigation">
         <div class="category-inner">
-            <a class="category-link" href="/category/all">전체</a>
+            <a class="category-link" href="/category/all">
+                <span role="img">&#127756;</span>
+                    전체
+                </span>
+            </a>
             <a class="category-link" href="/category/politics">
                 <span>
                     <span role="img">⚖️</span>
@@ -642,13 +752,17 @@
             </a>
             <a class="category-link" href="/category/foreign">
                 <span>
-                    <span role="img">🌐</span>
+                    <span role="img">&#127757;</span>
                     세계
                 </span>
             </a>
         </div>
     </nav>
     <section class="news">
+        <div class="audioControl">
+            <i id="audio" class="fa-solid fa-play" style="color: #ff1678;"></i>
+            <i id="pause" class="fa-solid fa-stop" style="color: #ff1678;"></i>
+        </div>
         <div class="news-category">
             <h2>⚖️ 정치</h2>
             <!--
@@ -661,7 +775,7 @@
         </div>
         <div class="posts">
             <c:forEach var="plist" items="${plist}">
-            <a class="card" href="/article/${plist.id}">
+            <a class="card" href="/category/politics/article/${plist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${plist.img}">
@@ -723,7 +837,7 @@
         </div>
         <div class="posts">
             <c:forEach items="${elist}" var="elist">
-            <a class="card" href="/article/${elist.id}">
+            <a class="card" href="/category/economic/article/${elist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${elist.img}">
@@ -784,7 +898,7 @@
         </div>
         <div class="posts">
             <c:forEach var="slist" items="${slist}">
-            <a class="card" href="/article/${slist.id}">
+            <a class="card" href="/category/society/article/${slist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${slist.img}">
@@ -834,7 +948,7 @@
         </div>
 
         <div class="news-category">
-            <h2>🌐 세계</h2>
+            <h2>&#127757; 세계</h2>
             <!--
             <button class="interest">
                 <span id="interest-plus">➕</span>
@@ -845,7 +959,7 @@
         </div>
         <div class="posts">
             <c:forEach var="flist" items="${flist}">
-            <a class="card" href="/article/${flist}">
+            <a class="card" href="/category/foreign/article/${flist.id}">
                 <div class="card-inner">
                     <figure class="card-thumbnail">
                         <img src="${flist.img}">
