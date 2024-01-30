@@ -2,9 +2,7 @@ package com.mulcam.newsya.service;
 
 import com.mulcam.newsya.dto.Article;
 import com.mulcam.newsya.dto.NewsLikeDto;
-import com.mulcam.newsya.dto.SearchDto;
 import com.mulcam.newsya.mapper.ArticleMapper;
-import com.mulcam.newsya.mapper.SearchMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

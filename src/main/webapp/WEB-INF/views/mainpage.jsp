@@ -495,19 +495,6 @@
                 $(".navbar-user-login").hide();
                 $(".navbar-user-info").css("display", "flex");
 
-                const id = {"id": "${sessionScope.id}"};
-                // ajax로 관심분야 갖고오기(배열값 리턴 받는다.)
-                const ajaxRes = Ajax("/getInterest", id);
-
-                // 해당 아이디에 이미 설정된 관심분야는 V 표시
-                // each의 index와 interest 클래스와 eq를 사용해 hide, show
-                $.each(ajaxRes, function(index, element){
-                    if(ajaxRes[index] === true){
-                        $(".interest:eq(" + index + ") > span:eq(0)").css("display", "none");
-                        $(".interest:eq(" + index + ") > span:eq(1)").css("display", "inline");
-                    }
-                });
-
 
                 $(".interest").click(function(){
 

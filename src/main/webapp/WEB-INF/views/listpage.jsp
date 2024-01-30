@@ -628,9 +628,10 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
 
-        $(function(){
 
-            if("${msg}" != null && "${msg}" != "") {
+        $(function () {
+
+            if ("${msg}" != null && "${msg}" != "") {
                 swal({
                     text:"${msg}",
                     icon: "info",
@@ -689,18 +690,35 @@
                 location.href="/category/${category}/date=" + $("#select-date").val();
             });
 
-            $(".like-button").click(function() {
-                var newsId = $(this).data("news-id");
-                $.ajax({
-                    url: "/toggleLike",
-                    type: "POST",
-                    data: { newsId: newsId },
-                    success: function(response) {
-                        alert(response); // 좋아요 상태 변경 결과를 알림 // sweetalert api 사용하는 코드로 수정해주세요.
-                    },
-                    error:function(){
-                        swal("통신 에러", "다시 시도해주세요.", "info");
+            function sAlert(message, icon, buttonText, funcName) {
+                swal({
+                    text: message,
+                    icon: icon,
+                    button: buttonText,
+                }).then(function(){
+                    if(funcName != null && funcName != "") {
+                        eval(funcName + "()");
                     }
+                });
+            }
+
+
+
+            $(document).ready(function() {
+                $(".like-button").click(function() {
+                    var newsId = $(this).data("news-id");
+                    $.ajax({
+                        url: "/toggleLike",
+                        type: "POST",
+                        data: { newsId: newsId },
+                        success: function(response) {
+                            if(response == "SUCCESS") {
+                                sAlert("관심기사목록에 추가 되었습니다.", "info", "OK");
+                            }else {
+                                sAlert("좋아요 실패", "error", "OK");
+                            }
+                        }
+                    });
                 });
             });
 
@@ -725,38 +743,6 @@
                 return res;
             }
 
-<<<<<<< HEAD
-        });
-    function sAlert(message, icon, buttonText, funcName) {
-            swal({
-                text: message,
-                icon: icon,
-                button: buttonText,
-             }).then(function(){
-                if(funcName != null && funcName != "") {
-                    eval(funcName + "()");
-                }
-             });
-        }
-    </script>
-    <script>
-        $(document).ready(function() {
-            $(".like-button").click(function() {
-                var newsId = $(this).data("news-id");
-                $.ajax({
-                    url: "/toggleLike",
-                    type: "POST",
-                    data: { newsId: newsId },
-                    success: function(response) {
-                        if(response == "SUCCESS") {
-                            sAlert("관심기사목록에 추가 되었습니다.", "info", "OK");
-                        }else {
-                            sAlert("좋아요 실패", "error", "OK");
-                        }
-                    }
-                });
-            });
-=======
             function getCategoryLabel(category) {
                 switch (category) {
                     case "politics":
@@ -780,7 +766,6 @@
                 }
             }
 
->>>>>>> 10eb3bf2d61d4e809caddcfd711f618649d23d58
         });
     </script>
 </head>
@@ -890,7 +875,7 @@
             <!-- 다음 페이지 버튼 -->
             <a href="javascript:void(0);" onclick="nextPage();" class="loadmore secondary-button">다음</a>
         </nav>
-
+    </section>
 </div>
 
 <%--<script type="text/javascript">

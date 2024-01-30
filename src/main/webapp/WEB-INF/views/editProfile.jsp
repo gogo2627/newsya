@@ -338,7 +338,8 @@
                         $(".auth").css("display","flex");
                         $("#timer").text("3 : 00");
                         $(".time, .auth-check").show();
-						$(".auth").css("margin-right","220px");
+						$(".auth").css("margin-right","320px");
+                        // ㄴ>인증버튼 누루고 인증입력창 확인 재전송 버튼 남은상태
 
                         TimerSet();
 
@@ -368,7 +369,7 @@
             // 확인 버튼 있으면 남기고, 없어졌으면 다시 생기게 하기
             if($(".auth-check").css("display") == "none"){
                 $(".auth-check").show();
-				$(".auth").css("margin-right","250px");
+				$(".auth").css("margin-right","300px");
                 //ㄴ>재전송 누른 후
             }
 
@@ -412,7 +413,7 @@
                 if(res === 1){
                     clearInterval(time);
                     $(".time, .auth-check").hide();
-					$(".auth").css("margin-right","330px");
+					$(".auth").css("margin-right","400px");
                     swal("인증 완료", "전화번호가 인증되었습니다.", "success");
                     //ㄴ>확인 버튼 누른 후 인증번호창이랑 재전송버튼만 남은상태
                     authChk = 1;

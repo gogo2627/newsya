@@ -2,8 +2,6 @@ package com.mulcam.newsya.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class Paging {
 	private int allDataCount;		// 전체 데이터 수
