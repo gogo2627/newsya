@@ -719,22 +719,10 @@
                     전체
                 </span>
             </a>
-            <a class="category-link" href="/category/politics">
-                <span>
-                    <span role="img">⚖️</span>
-                    정치
-                </span>
-            </a>
             <a class="category-link" href="/category/economic">
                 <span>
                     <span role="img">💰</span>
                     경제
-                </span>
-            </a>
-            <a class="category-link" href="/category/society">
-                <span>
-                    <span role="img">🤝</span>
-                    사회
                 </span>
             </a>
             <a class="category-link" href="/category/foreign">
@@ -743,12 +731,74 @@
                     세계
                 </span>
             </a>
+            <a class="category-link" href="/category/politics">
+                <span>
+                    <span role="img">⚖️</span>
+                    정치
+                </span>
+            </a>
+            <a class="category-link" href="/category/society">
+                <span>
+                    <span role="img">🤝</span>
+                    사회
+                </span>
+            </a>
         </div>
     </nav>
     <section class="news">
         <div class="audioControl">
             <i id="audio" class="fa-solid fa-play" style="color: #ff1678;"></i>
             <i id="pause" class="fa-solid fa-stop" style="color: #ff1678;"></i>
+        </div>
+        <div class="news-category">
+            <h2>💰 경제</h2>
+            <!--
+            <button class="interest">
+                <span id="interest-plus">➕</span>
+                <span id="interest-check">✔</span>
+                <span>관심분야</span>
+            </button>
+            -->
+        </div>
+        <div class="posts">
+            <c:forEach items="${elist}" var="elist">
+            <a class="card" href="/category/economic/article/${elist.id}">
+                <div class="card-inner">
+                    <figure class="card-thumbnail">
+                        <img src="${elist.img}">
+                    </figure>
+                    <div class="card-body">
+                        <h3 class="card-title">${elist.title}</h3>
+                        <time class="card-date">${elist.date}</time>
+                    </div>
+                </div>
+            </a>
+            </c:forEach>
+        </div>
+        <div class="news-category">
+            <h2>&#127757; 세계</h2>
+            <!--
+            <button class="interest">
+                <span id="interest-plus">➕</span>
+                <span id="interest-check">✔</span>
+                <span>관심분야</span>
+            </button>
+            -->
+        </div>
+        <div class="posts">
+            <c:forEach var="flist" items="${flist}">
+            <a class="card" href="/category/foreign/article/${flist.id}">
+                <div class="card-inner">
+                    <figure class="card-thumbnail">
+                        <img src="${flist.img}">
+                    </figure>
+                    <div class="card-body">
+                        <h3 class="card-title">${flist.title}</h3>
+                        <time class="card-date">${flist.date}</time>
+                    </div>
+                </div>
+            </a>
+            </c:forEach>
         </div>
         <div class="news-category">
             <h2>⚖️ 정치</h2>
@@ -774,105 +824,7 @@
                 </div>
             </a>
             </c:forEach>
-            <!--
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시2</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시3</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시4</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            -->
-
         </div>
-
-        <div class="news-category">
-            <h2>💰 경제</h2>
-            <!--
-            <button class="interest">
-                <span id="interest-plus">➕</span>
-                <span id="interest-check">✔</span>
-                <span>관심분야</span>
-            </button>
-            -->
-        </div>
-        <div class="posts">
-            <c:forEach items="${elist}" var="elist">
-            <a class="card" href="/category/economic/article/${elist.id}">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="${elist.img}">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">${elist.title}</h3>
-                        <time class="card-date">${elist.date}</time>
-                    </div>
-                </div>
-            </a>
-            </c:forEach>
-            <!--
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시2</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시3</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시4</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            -->
-        </div>
-
         <div class="news-category">
             <h2>🤝 사회</h2>
             <!--
@@ -897,103 +849,9 @@
                 </div>
             </a>
             </c:forEach>
-            <!--
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시2</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시3</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시4</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            -->
         </div>
 
-        <div class="news-category">
-            <h2>&#127757; 세계</h2>
-            <!--
-            <button class="interest">
-                <span id="interest-plus">➕</span>
-                <span id="interest-check">✔</span>
-                <span>관심분야</span>
-            </button>
-            -->
-        </div>
-        <div class="posts">
-            <c:forEach var="flist" items="${flist}">
-            <a class="card" href="/category/foreign/article/${flist.id}">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="${flist.img}">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">${flist.title}</h3>
-                        <time class="card-date">${flist.date}</time>
-                    </div>
-                </div>
-            </a>
-            </c:forEach>
-            <!--
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시2</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시3</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="">
-                <div class="card-inner">
-                    <figure class="card-thumbnail">
-                        <img src="">
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">예시4</h3>
-                        <time class="card-date">2023/12/15</time>
-                    </div>
-                </div>
-            </a>
-            -->
-        </div>
+
     </section>
 
     <footer class="footer" role="contentinfo">

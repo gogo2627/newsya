@@ -799,28 +799,28 @@
                 <span role="img">&#127756;</span>
                 전체
             </a>
-            <a class="category-link" href="/category/politics">
-                <span>
-                    <span role="img">⚖️</span>
-                    정치
-                </span>
-            </a>
             <a class="category-link" href="/category/economic">
                 <span>
                     <span role="img">💰</span>
                     경제
                 </span>
             </a>
-            <a class="category-link" href="/category/society">
-                <span>
-                    <span role="img">🤝</span>
-                    사회
-                </span>
-            </a>
             <a class="category-link" href="/category/foreign">
                 <span>
                     <span role="img">&#127757;</span>
                     세계
+                </span>
+            </a>
+            <a class="category-link" href="/category/politics">
+                <span>
+                    <span role="img">⚖️</span>
+                    정치
+                </span>
+            </a>
+            <a class="category-link" href="/category/society">
+                <span>
+                    <span role="img">🤝</span>
+                    사회
                 </span>
             </a>
         </div>
