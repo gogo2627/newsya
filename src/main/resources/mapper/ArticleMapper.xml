@@ -4,7 +4,7 @@
 <mapper namespace="com.mulcam.newsya.mapper.ArticleMapper">
 
     <select id="selectMyLikedNews" resultType="com.mulcam.newsya.dto.Article">
-        SELECT ATICLE.ID, ATICLE.TITLE, ATICLE.CONTENT, ATICLE.IMG
+        SELECT ATICLE.ID, ATICLE.TITLE, ATICLE.CONTENT, ATICLE.IMG, ATICLE.CATEGORY
         FROM news ATICLE, NEWSLIKE NL, USER U
         WHERE U.LOGIN_ID = #{loginId}
         AND ATICLE.ID = NL.NEWS_ID

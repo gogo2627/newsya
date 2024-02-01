@@ -10,10 +10,13 @@ public class Article {
     private String title;
     private String content;
     private String img;
-    public Article(String newsId, String imageUrl, String title, String content) {
+    private String category;
+
+    public Article(String newsId, String imageUrl, String title, String content, String category) {
         this.id = newsId;
         this.img = imageUrl;
         this.title = title;
         this.content = content;
+        this.category = category;
     }
 }

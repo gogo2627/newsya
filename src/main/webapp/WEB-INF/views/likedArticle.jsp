@@ -80,7 +80,7 @@ img {
 	overflow: clip;
 	height: 100%;
     object-fit: cover;
-    max-height: 250px;
+    max-height: 450px;
 }
 
 a {
@@ -96,52 +96,6 @@ a {
 	font-size: 40px;
 	margin-top: 10px;
 }
-
-/* article */
-
-article {
-	height: 500px;
-}
-
-.quickMenu {
-	float: left;
-	margin-top: 120px;
-	width: 100%;
-}
-
-article img {
-	width: 100%;
-}
-
-.report {
-	float: left;
-	width: 400px;
-	margin-left: 60px;
-	margin-bottom: 60px;
-	list-style-type: none;
-}
-
-.ellipsis {
-    font-size: 1.20rem;
-    word-wrap: 2;
-    overflow: hidden;
-    white-space: normal;
-    text-overflow: ellipsis;
-    text-align: left;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-}
-
-h3.ellipsis {
-    -webkit-line-clamp: 2;
-}
-
-p.ellipsis {
-    font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-    font-weight: 600;
-    -webkit-line-clamp: 5;
-}
-/* article */
 
 /* 	pagination */
 .pagination {
@@ -182,6 +136,88 @@ p.ellipsis {
 	padding-bottom: 100px;
 }
 /* 	pagination */
+
+
+/* article */
+.news {
+    width: 90%;
+    max-width: 1360px;
+    margin-left: 2%;
+    padding: 100px 5% 30px 5%;
+    position: relative;
+}
+
+.posts {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    border-width: 1px 0 0 1px;
+    padding-left: 50px;
+
+.card {
+    display: block;
+    width: 29%;
+    color: black;
+    border-width: 0 1px 1px 0;
+    cursor: pointer;
+    margin-bottom: 70px;
+    margin-right: 50px;
+    text-decoration: none;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card > * {
+    pointer-events: none;
+}
+
+.card .card-thumbnail {
+    padding-bottom: 75%;
+    height: 0;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.card, .card .card-thumbnail {
+    box-sizing: border-box;
+    position: relative;
+}
+
+.card-thumbnail {
+    display: block;
+    margin: 0px;
+}
+
+.card .card-body {
+    padding: 1.5rem 0.5rem 0rem 0.5rem;
+    box-sizing: border-box;
+}
+
+.card .card-body .card-title, .card-content {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical /* https://velog.io/@syoung125/CSS-text-overflow-ellipsis-%EB%91%90%EC%A4%84-%EC%9D%B4%EC%83%81-%EC%B2%98%EB%A6%AC */;
+}
+
+.card-title {
+    -webkit-line-clamp: 2;
+}
+
+.card-content {
+     -webkit-line-clamp: 5;
+         font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+         font-weight: 600;
+ }
+/* article */
 </style>
 </head>
 <body>
@@ -203,21 +239,24 @@ p.ellipsis {
 		</section>
 	</c:when>
 	<c:otherwise>
-	<section class="cont02">
-		<div class="contentBox">
-			<ul class="quickMenu">
-				<c:forEach var="myLikedNewsList" items="${myLikedNewsList}">
-					<li class="report">
-						<article>
-							<img src="${myLikedNewsList.img}" alt="">
-							<h3 class="ellipsis">${myLikedNewsList.title}</h3>
-                            <p class="ellipsis">${myLikedNewsList.content}</p>
-						</article>
-					</li>
-				</c:forEach>
-			</ul>
-		</div>
+	<section class="news">
+		<div class="posts">
+            <c:forEach var="myLikedNewsList" items="${myLikedNewsList}">
+                <a class="card" href="/category/${myLikedNewsList.category}/article/${myLikedNewsList.id}">
+                    <div class="card-inner">
+                        <figure class="card-thumbnail">
+                                <img src="${myLikedNewsList.img}">
+                        </figure>
+                        <div class="card-body">
+                            <h3 class="card-title">${myLikedNewsList.title}</h3>
+                            <p class="card-content">${myLikedNewsList.content}</p>
+                        </div>
+                    </div>
+                </a>
+            </c:forEach>
+        </div>
 	</section>
+
 
 	<div class="center">
 		<div class="pagination" id="pages">

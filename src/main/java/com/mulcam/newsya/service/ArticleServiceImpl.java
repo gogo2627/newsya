@@ -39,15 +39,16 @@ public class ArticleServiceImpl implements ArticleService{
         return res;
     }
 
+
     @Override
     public List<Article> setDummyData(List<Article> newsList, int dataCount) {
         String content = "Aenean ornare velit lacus, ac varius enim lorem ullamcorper\n" +
                 "dolore. Proin aliquam facilisis ante interdum. Sed nulla amet loremfeugiat tempus aliquam.feugiat tempus aliquam.feugiat tempus aliquam.feugiat tempus aliquam.feugiat tempus aliquam.feugiat tempus aliquam.feugiat tempus aliquam.\n" +
                 "feugiat tempus aliquam.";
-        Article news1 = new Article("2", "resources/image/pic01.jpg", content , content+content+content+content);
+        Article news1 = new Article("2", "resources/image/pic01.jpg", content , content+content+content+content, "economic");
         newsList.add(news1);
         for(int i=3; i<dataCount; i++) {
-            Article news = new Article(i+"", "resources/image/pic01.jpg", "제목"+i , content);
+            Article news = new Article(i+"", "resources/image/pic01.jpg", "제목"+i , content, "economic");
             newsList.add(news);
         }
         return newsList;
