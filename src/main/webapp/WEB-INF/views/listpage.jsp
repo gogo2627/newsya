@@ -709,15 +709,22 @@
                     if(!"${sessionScope.id}".length > 0){
                         window.location.href="/goLogin";
                     }
-                    var newsId = $(this).data("news-id");
+                    var button = $(this);
+                    var newsId = button.data("news-id");
                     $.ajax({
                         url: "/toggleLike",
                         type: "POST",
                         data: { newsId: newsId },
                         success: function(response) {
                             if(response == "SUCCESS") {
+                                // 좋아요 상태가 토글되었으므로 이미지 변경
+                                if (button.find("img").attr("src").includes("yes")) {
+                                    button.find("img").attr("src", "${pageContext.request.contextPath}/resources/image/yes_.png");
+                                } else {
+                                    button.find("img").attr("src", "${pageContext.request.contextPath}/resources/image/yes.png");
+                                }
                                 sAlert("북마크에 추가 되었습니다.", "info", "OK");
-                            }else {
+                            } else {
                                 sAlert("좋아요 실패", "error", "OK");
                             }
                         }
@@ -1004,6 +1011,7 @@
                 window.location.href = nextPageUrl;
             }
         </script>
+
 
 </body>
 </html>
